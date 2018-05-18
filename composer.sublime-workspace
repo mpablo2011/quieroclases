@@ -1,0 +1,190 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/xampp/htdocs/slim/composer.json",
+		"/C/xampp/htdocs/quieroservicios/vendor/slim.php",
+		"/C/xampp/htdocs/quieroservicios/index.pgp.php",
+		"/C/xampp/htdocs/quieroservicios/vendor/psr/http-message/src/ServerRequestInterface.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getCityById.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getCitiesByStateProvinceId.php",
+		"/C/xampp/htdocs/quieroservicios/composer.json",
+		"/C/Users/Pablo/AppData/Local/Temp/7zOC989CC07/composer.json",
+		"/C/xampp/htdocs/hcdAdmin/administrar_ordenanzas.php",
+		"/C/xampp/htdocs/hcdAdmin/login.php",
+		"/C/xampp/htdocs/hcdAdmin/admin_menu.php",
+		"/C/xampp/htdocs/hcdAdmin/utiles/funciones.php",
+		"/C/xampp/htdocs/quieroservicios/utiles/funciones.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getProfessionById.php",
+		"/C/xampp/htdocs/quieroservicios/Slim/Exception/ContainerException.php",
+		"/C/Users/Pablo/AppData/Local/Temp/7zOC98E00FE/composer.json",
+		"/C/xampp/htdocs/hcdAdmin/controller/seguridad.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getStateProvince.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getCities.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/getCityByID.php",
+		"/C/xampp/htdocs/login/login/checklogin.php",
+		"/C/xampp/htdocs/quieroservicios/servicios/checklogin.php",
+		"/C/xampp/htdocs/quieroservicios/database/database.php",
+		"/C/xampp/htdocs/quieroservicios/database/mysql_login.php",
+		"/C/xampp/htdocs/quieroservicios/database/conection.php",
+		"/C/Users/Pablo/Desktop/Proyectos/BackUp/htdocs/hcdBaradero/expedientes.php"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "composer.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 188.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
