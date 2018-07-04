@@ -158,9 +158,63 @@ $app->post('/insertBudget', function (Request $request, Response $response) {
 })->add($AuthUserPermisson);
 
 
+// obtengo una profesión por id
+$app->get('/getBudgetsByByProjectID/{projectID}', function (Request $request, Response $response) {
+
+    try {
+        // Preparar sentencia
+        $consulta = "call bgt_getBudgetsByByProjectID(:projectID);";
+        //Creo una nueva conexión
+        $conn = Database::getInstance()->getDb();
+        //Preparo la consulta
+        $comando = $conn->prepare($consulta);
+        //bindeo el parámetro a la consulta
+        $projectID = $request->getAttribute('projectID');
+        $projectID = clean_var($projectID);
+        $comando->bindValue(':projectID', $projectID);
+
+        // Ejecutar sentencia preparada
+        $comando->execute();
+        //Obtengo el arreglo de registros
+        $values = $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        //Armo la respuesta
+        if($values)
+        {
+            $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+            $respuesta["values"] = $values;
+        }
+        else
+        {
+            $respuesta["status"] = array("code" => 917, "description" => requestStatus(917)); // No data found
+        }
+
+        //Elimino la conexión
+        $comando  = null;
+        $conn = null;
+    }
+    catch (PDOException $e)
+    {
+        if(DEBUG_MODE == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));
+    }
+    catch (Exception $e)
+    {
+        if(DEBUG_MODE == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+    }
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
 
 // Verifico el token de la aplicación que invoca el servicio
-$app->add($AuthAppKey);
+//$app->add($AuthAppKey);
 
 //Ejecuto el FrameWork
 $app->run();

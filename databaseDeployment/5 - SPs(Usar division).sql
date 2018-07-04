@@ -1,4 +1,4 @@
--- Dado un ID, devuelve la información del usuario.
+-- Dado un ID, devuelve la informacion del usuario.
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS sp_getUserInformation $$
@@ -37,7 +37,7 @@ WHERE userID = _userID;
 
 END $$
 
- DELIMITER;
+DELIMITER;
  
 -- Devuelve el listado de provincias
 DELIMITER $$
@@ -1002,4 +1002,42 @@ WHERE clientLocationID = @clientLocationID;
 END IF;
 
 END $$
+DELIMITER;
+
+-- Dado un projectID, devuelve los presupuestos.
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS bgt_getBudgetsByByProjectID $$
+
+CREATE PROCEDURE bgt_getBudgetsByByProjectID(IN _projectID int)
+
+BEGIN
+
+SELECT bgt.budgetID, 
+       bgt.projectID, 
+       bgt.professionalID, 
+       bgt.amount, 
+       bgt.requestDate, 
+       bgt.budgetStatusID,
+       bgs.statusName,
+       bgs.statusDescription,
+       bgt.comments,
+       usi.firstName,
+       usi.lastName,
+       usi.sexID,
+       sty.sexCode,
+       sty.sexName
+FROM budgets bgt,
+     budgetstatus bgs,
+     professionals pfs,
+     userinformation usi,
+     sextypes sty
+WHERE bgt.budgetStatusID = bgs.budgetStatusID
+AND   pfs.professionalID = bgt.professionalID
+AND pfs.userID = usi.userID
+AND usi.sexID = sty.sexID;
+
+
+END $$
+
 DELIMITER;

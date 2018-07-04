@@ -203,6 +203,7 @@ function requestStatus($code) {
             914 => 'Error al enviar el Email',
             915 => 'User Token Cannot be Null',
             916 => 'Usuario autenticado de forma correcta, ya puede ingresar a la aplicacion',
+            917 => 'No existen presupuestos para este proyecto',
             23001 => 'Ya existe un proyecto con el mismo nombre.',
             23002 => 'El mail ingresado ya existe.',
             24001 => 'Token invalido.',
