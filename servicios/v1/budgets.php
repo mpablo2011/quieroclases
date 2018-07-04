@@ -14,7 +14,6 @@ require '../../utiles/funciones.php';
 require '../../security/auth.php';
 require '../../middlewares/middleware.php';
 require_once '../../utiles/variables.php';
-//require 'mail.php';
 
 
 
