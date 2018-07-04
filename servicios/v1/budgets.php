@@ -11,6 +11,10 @@ require '../../vendor/autoload.php';
 //incluyo la conexion a db y las funciones
 require '../../database/database.php';
 require '../../utiles/funciones.php';
+require '../../security/auth.php';
+require '../../middlewares/middleware.php';
+require_once '../../utiles/variables.php';
+//require 'mail.php';
 
 
 
