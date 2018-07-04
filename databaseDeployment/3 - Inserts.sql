@@ -70,6 +70,9 @@ INSERT INTO roleGrants VALUES (null, '4', 'getClientLocation',1);
 INSERT INTO roleGrants VALUES (null, '1', 'insertclientlocation',1);
 INSERT INTO roleGrants VALUES (null, '3', 'insertclientlocation',1);
 INSERT INTO roleGrants VALUES (null, '4', 'insertclientlocation',1);
+INSERT INTO roleGrants VALUES (null, '1', 'getBudgetsByByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '3', 'getBudgetsByByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByByProjectID',1);
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;
 
