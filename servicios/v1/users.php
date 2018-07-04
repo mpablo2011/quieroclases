@@ -206,6 +206,8 @@ else
                                 $comando->execute();
                             }
 
+                            // DESHABILITADO EL ENVIO DE MAIL POR EL MOMENTO
+                            /*
                             //Si todo salio bien dejo envío un mail con el token de validacion
                             $consulta = "call ntf_insertNotification(:userID, :notificationType);";
                             $conn = Database::getInstance()->getDb();
@@ -213,7 +215,7 @@ else
                             $comando->bindValue(':userID', $userData["userID"]);
                             $comando->bindValue(':notificationType', AUTH_MAIL_NOTIFICATION);
                             $comando->execute();
-
+                            */
                             $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
 
 

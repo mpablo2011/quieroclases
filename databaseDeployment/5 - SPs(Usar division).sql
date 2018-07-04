@@ -370,7 +370,7 @@ DELIMITER;
 -- Genera una nueva asociacion entre un profesional y una profesion
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS sp_insertProfessionalProfession $$
+DROP PROCEDURE IF EXISTS pps_insertProfessionalProfession $$
 CREATE PROCEDURE sp_insertProfessionalProfession(IN _professionalID int, IN _professionID int)
 
 BEGIN
@@ -523,7 +523,7 @@ INSERT INTO users(
   ,failCount
 ) VALUES (
    NULL -- userID - IN int(11)
-  ,3 -- userStatusID - Pendiente
+  ,1 -- userStatusID - ACTIVO
   ,_usereMail -- emailAddress - IN varchar(100)
   ,0   -- isAuthenticated - IN int(11)
   ,NULL  -- authenticationDate - IN date
@@ -927,8 +927,8 @@ DELIMITER;
 
 -- Obtengo la ubicacion del profesional
 DELIMITER $$
-DROP PROCEDURE IF EXISTS pfl_getprofessionaltLocation $$
-CREATE PROCEDURE pfl_getprofessionaltLocation(IN _userID int)
+DROP PROCEDURE IF EXISTS pfl_getProfessionalLocation $$
+CREATE PROCEDURE pfl_getProfessionalLocation(IN _userID int)
 BEGIN
 
 SELECT 
@@ -998,6 +998,62 @@ SET countryID = _countryID -- int(11)
    ,lat = _lat -- float(10,6)
    ,lng = _lng -- float(10,6)
 WHERE clientLocationID = @clientLocationID;
+
+END IF;
+
+END $$
+DELIMITER;
+
+-- inserta o actualiza la ubicacion de un profesional
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfl_insProfessionalLocation $$
+CREATE PROCEDURE pfl_insProfessionalLocation(IN _userID int, IN _countryID int, IN _stateProvinceID int, IN _cityID int,
+in _streetAddress varchar(100), IN _lat int, IN _lng int)
+BEGIN
+
+SET @professionalID = (SELECT professionalID FROM professionals where userID = _userID);
+
+IF(@professionalID is null)
+THEN
+INSERT INTO professionals (userID) VALUES (_userID);
+SET @professionalID = (SELECT professionalID FROM professionals where userID = _userID);
+END IF;
+
+SET @professionalLocationID = (SELECT professionalLocationID FROM cprofessionalLocation where professionalID = @professionalID);
+
+IF(@professionalLocationID is null)
+THEN
+
+INSERT INTO professionalLocation(
+   professionalID
+  ,professionalLocationStatusID
+  ,countryID
+  ,stateProvinceID
+  ,cityID
+  ,streetAddress
+  ,lat
+  ,lng
+) VALUES (
+   @professionalID
+  ,1
+  ,_countryID   -- countryID - IN int(11)
+  ,_StateProvinceID   -- stateProvinceID - IN int(11)
+  ,_cityID   -- cityID - IN int(11)
+  ,_streetAddress  -- streetAddress - IN varchar(100)
+  ,_lat   -- lat - IN float(10,6)
+  ,_lng   -- lng - IN float(10,6)
+);
+
+ELSE
+
+UPDATE professionalLocation
+SET countryID = _countryID -- int(11)
+   ,stateProvinceID = _stateProvinceID -- int(11)
+   ,cityID = _cityID -- int(11)
+   ,streetAddress = _streetAddress -- varchar(100)
+   ,lat = _lat -- float(10,6)
+   ,lng = _lng -- float(10,6)
+WHERE professionalLocationID = @professionalLocationID;
 
 END IF;
 
