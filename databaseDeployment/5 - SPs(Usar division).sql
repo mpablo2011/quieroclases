@@ -1082,17 +1082,24 @@ SELECT bgt.budgetID,
        usi.lastName,
        usi.sexID,
        sty.sexCode,
-       sty.sexName
+       sty.sexName,
+       pfl.stateProvinceID,
+      pfl.cityID,
+      pfl.streetAddress,
+       pfl.lat,
+       pfl.lng
 FROM budgets bgt,
      budgetstatus bgs,
      professionals pfs,
+     professionaltLocation pfl,
      userinformation usi,
      sextypes sty
 WHERE bgt.budgetStatusID = bgs.budgetStatusID
 AND   pfs.professionalID = bgt.professionalID
 AND pfs.userID = usi.userID
 AND usi.sexID = sty.sexID
-AND bgt.projectID = _projectID ;
+AND bgt.projectID = _projectID 
+AND pfs.professionalID = pfl.professionalID;
 
 
 END $$
