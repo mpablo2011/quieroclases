@@ -371,7 +371,7 @@ DELIMITER;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pps_insertProfessionalProfession $$
-CREATE PROCEDURE sp_insertProfessionalProfession(IN _professionalID int, IN _professionID int)
+CREATE PROCEDURE pps_insertProfessionalProfession(IN _professionalID int, IN _professionID int)
 
 BEGIN
 
@@ -1063,9 +1063,9 @@ DELIMITER;
 -- Dado un projectID, devuelve los presupuestos.
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS bgt_getBudgetsByByProjectID $$
+DROP PROCEDURE IF EXISTS bgt_getBudgetsByProjectID $$
 
-CREATE PROCEDURE bgt_getBudgetsByByProjectID(IN _projectID int)
+CREATE PROCEDURE bgt_getBudgetsByProjectID(IN _projectID int)
 
 BEGIN
 
@@ -1091,9 +1091,39 @@ FROM budgets bgt,
 WHERE bgt.budgetStatusID = bgs.budgetStatusID
 AND   pfs.professionalID = bgt.professionalID
 AND pfs.userID = usi.userID
-AND usi.sexID = sty.sexID;
+AND usi.sexID = sty.sexID
+AND bgt.projectID = _projectID ;
 
 
 END $$
 
+DELIMITER;
+
+-- Inserta un nuevo presupuesto
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfl_insertProfessional $$
+CREATE PROCEDURE bgt_insBudget(IN _projectID int, IN _userID int, IN _amount bigint, IN _comments text)
+
+BEGIN
+
+SET @professionalID = (SELECT professionalID FROM professionals where userID = _userID);
+IF(@professionalID is not null)
+THEN
+
+INSERT INTO quieroservicios.budgets(
+   projectID
+  ,professionalID
+  ,amount
+  ,comments
+) VALUES (
+   _projectID -- projectID - IN int(11)
+  ,@professionalID -- professionalID - IN int(11)
+  ,_amount -- amount - IN bigint(20)
+  ,_comments  -- comments - IN text
+);
+
+END IF;
+
+END $$
 DELIMITER;

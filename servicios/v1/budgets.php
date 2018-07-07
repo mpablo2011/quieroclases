@@ -14,6 +14,7 @@ require '../../utiles/funciones.php';
 require '../../security/auth.php';
 require '../../middlewares/middleware.php';
 require_once '../../utiles/variables.php';
+//require 'mail.php';
 
 
 
@@ -82,78 +83,86 @@ $app->get('/getBudgetByBudgetID/{budgetID}', function (Request $request, Respons
 
 });
 
-// Inserta un nuevo presupuesto
+// Inserto un nuevo proyecto
 $app->post('/insertBudget', function (Request $request, Response $response) {
 
+
     // Preparar sentencia
-    $consulta = "call bgt_insBudget(:userEmail);";
+    $consulta = "call bgt_insBudget(:projectID, :userID, :amount, :comments);";
 
     //Obtengo y limpio las variables
+    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
+    
+    $projectID = $request->getAttribute('projectID');
+    $projectID = clean_var($projectID);
 
-    $userEmail = $request->getParam('userEmail');
-    $userEmail = clean_var($userEmail);
+    $amount = $request->getParam('amount');
+    $amount = clean_var($amount);
 
-    $userPassword = $request->getParam('userPassword');
-    $userPassword = clean_var($userPassword);
+    $comments = $request->getParam('comments');
+    $comments = clean_var($comments);
 
+if ($userID != '' && $projectID != '' && $amount != '')
+{
+    try {
 
+        //Creo una nueva conexión
+        $conn = Database::getInstance()->getDb();
+        //Preparo la consulta
+        $comando = $conn->prepare($consulta);
+        //bindeo el parámetro a la consulta
+        $comando->bindValue(':userID', $userID);
+        $comando->bindValue(':projectID', $projectID);
+        $comando->bindValue(':amount', $amount);
+        $comando->bindValue(':comments', $comments);
 
-    if ($userEmail != '' && $userPassword != '')
+        // Ejecutar sentencia preparada
+        $comando->execute();
+
+        //Armo la respuesta
+        if($comando->rowCount() == 1)
+        {
+            $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+        }
+        else
+        {
+            $respuesta["status"] = array("code" => 408, "description" => requestStatus(409));
+        }
+
+        //Elimino la conexión
+        $comando  = null;
+        $conn = null;
+    }
+    catch (PDOException $e)
     {
-
-        try {
-            //Creo una nueva conexión
-            $conn = Database::getInstance()->getDb();
-            //Preparo la consulta
-            $comando = $conn->prepare($consulta);
-            //bindeo el parámetro a la consulta
-            $comando->bindValue(':userEmail', $userEmail);
-
-            // Ejecutar sentencia preparada
-            $comando->execute();
-            //Obtengo el arreglo de registros
-            $userData = $comando->fetch(PDO::FETCH_ASSOC);
-
-            if( $userData["userID"] == -1) {
-                //El mail ingresado ya existe
-                $respuesta["status"] = array("code" => 905, "description" => requestStatus(905)); //OK
-            }
-            else {
-                // Inserto la contraseña
-                $consulta = "call pwd_insPassword(:userID, :userPassword);";
-                $conn = Database::getInstance()->getDb();
-                $comando = $conn->prepare($consulta);
-                $comando->bindValue(':userID', $userData["userID"]);
-                $comando->bindValue(':userPassword', $userPassword);
-                $comando->execute();
-                //Armo la respuesta
-                $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
-            }
-
-
-
-            //Elimino la conexión
-            $comando  = null;
-            $conn = null;
-        }
-        catch (PDOException $e)
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
         {
-            if($GLOBALS["debugMode"] == true)
-                $respuesta["status"] = array("errmsg" => $e->getMessage());
-            else
-                $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));
-        }
-        catch (Exception $e)
-        {
-            if($GLOBALS["debugMode"] == true)
-                $respuesta["status"] = array("errmsg" => $e->getMessage());
-            else
-                $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+            switch ($comando->errorCode()) {
+                case '23000':
+                    $respuesta["status"] = array("code" => 23001, "description" => requestStatus(23001));
+                    break;
+                
+                default:
+                   $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+                    break;
+            };
+            
         }
     }
-    else {
-        $respuesta["status"] = array("code" => 906, "description" => requestStatus(906));
+    catch (Exception $e)
+    {
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
     }
+}
+else
+{
+    $respuesta["status"] = array("code" => 907, "description" => requestStatus(907));
+}
 
     //Realizo el envío del mensaje
     return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
@@ -161,12 +170,12 @@ $app->post('/insertBudget', function (Request $request, Response $response) {
 })->add($AuthUserPermisson);
 
 
-// obtengo una profesión por id
-$app->get('/getBudgetsByByProjectID/{projectID}', function (Request $request, Response $response) {
+// obtengo los presupuestos por id de proyecto
+$app->get('/getBudgetsByProjectID/{projectID}', function (Request $request, Response $response) {
 
     try {
         // Preparar sentencia
-        $consulta = "call bgt_getBudgetsByByProjectID(:projectID);";
+        $consulta = "call bgt_getBudgetsByProjectID(:projectID);";
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta

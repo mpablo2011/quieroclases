@@ -70,9 +70,14 @@ INSERT INTO roleGrants VALUES (null, '4', 'getClientLocation',1);
 INSERT INTO roleGrants VALUES (null, '1', 'insertclientlocation',1);
 INSERT INTO roleGrants VALUES (null, '3', 'insertclientlocation',1);
 INSERT INTO roleGrants VALUES (null, '4', 'insertclientlocation',1);
-INSERT INTO roleGrants VALUES (null, '1', 'getBudgetsByByProjectID',1);
-INSERT INTO roleGrants VALUES (null, '3', 'getBudgetsByByProjectID',1);
-INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '1', 'getBudgetsByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '3', 'getBudgetsByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByProjectID',1);
+INSERT INTO roleGrants VALUES (null, '1', 'getBudgetsByProjectID/{projectID}',1);
+INSERT INTO roleGrants VALUES (null, '3', 'getBudgetsByProjectID/{projectID}',1);
+INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByProjectID/{projectID}',1);
+INSERT INTO roleGrants VALUES (null, '1', 'insertBudget}',2);
+INSERT INTO roleGrants VALUES (null, '4', 'insertBudget',2);
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;
 
