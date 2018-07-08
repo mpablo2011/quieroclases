@@ -487,6 +487,22 @@ CREATE TABLE notifications (
 
 
 --
+-- Table structure for table projectprofessionals
+--
+DROP TABLE IF EXISTS projectprofessionals;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE projectprofessionals(
+	projectprofessionalsID int NOT NULL AUTO_INCREMENT,
+  professionalID int NOT NULL,
+	projectID int NOT NULL,
+  PRIMARY KEY (projectprofessionalsID),
+  UNIQUE KEY (professionalID, projectID)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
 -- CONSTRAINTS
 --
 -- ALTER TABLE users ADD CONSTRAINT user_DocTypes_fk FOREIGN KEY (docTypeID) REFERENCES docTypes (docTypeID);

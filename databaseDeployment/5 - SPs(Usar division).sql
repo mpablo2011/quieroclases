@@ -638,28 +638,43 @@ DROP PROCEDURE IF EXISTS prj_insProjectByUserID $$
 CREATE PROCEDURE `prj_insProjectByUserID`(IN _userID int, IN _projectName varchar(255), _professionID int, _projectDescription text)
 BEGIN
 
-SET @clientID = (SELECT clientID FROM clients where userID = _userID);
-IF(@clientID is not null)
+CREATE TEMPORARY TABLE prfID 
+SELECT prf.professionalID 
+FROM professionals prf, professionalprofessions prn 
+WHERE prf.professionalID = prn.professionalID
+AND prn.professionID = _professionID;
+
+SET @existprofessionals = (select count(*) from prfID);
+
+IF(@existprofessionals > 0)
 THEN
+    SET @clientID = (SELECT clientID FROM clients where userID = _userID);
 
-INSERT INTO projects(
-   projectID
-   ,projectName
-  ,clientID
-  ,professionID
-  ,registerDate
-  ,projectStatusID
-  ,projectDescription
-) VALUES (
-   NULL -- projectID - IN int(11)
-   ,_projectName
-  ,@clientID -- clientID - IN int(11)
-  ,_professionID -- professionID - IN int(11)
-  ,CURRENT_TIMESTAMP()  -- registerDate - IN datetime
-  ,1 -- projectStatusID - IN int(11)
-  ,_projectDescription  -- projectDescription - IN text
-);
+    IF(@clientID is not null)
+    THEN
 
+      INSERT INTO projects(
+         projectName
+        ,clientID
+        ,professionID
+        ,registerDate
+        ,projectStatusID
+        ,projectDescription
+      ) VALUES (
+         _projectName
+        ,@clientID -- clientID - IN int(11)
+        ,_professionID -- professionID - IN int(11)
+        ,CURRENT_TIMESTAMP()  -- registerDate - IN datetime
+        ,1 -- projectStatusID - IN int(11)
+        ,_projectDescription  -- projectDescription - IN text
+      );
+      
+      SET @projectID = LAST_INSERT_ID();
+      
+      INSERT INTO projectprofessionals (projectID, professionalID)
+      SELECT @projectID, professionalID FROM prfID;
+
+    END IF;
 END IF;
 
 END $$
@@ -673,7 +688,7 @@ CREATE PROCEDURE prj_getProjectsByUserID(IN _userID int)
 BEGIN
 
 SELECT prj.projectID, prj.projectName projectName, prj.clientID clientID, prj.professionID professionID, 
-prf.professionName professionName, DATE_FORMAT(prj.registerDate, '%d/%m/%y') registerDate, prj.projectStatusID projectStatusID, 
+prf.professionName professionName, prj.registerDate registerDate, prj.projectStatusID projectStatusID, 
 prs.statusName statusName, prj.projectDescription projectDescription 
 FROM projects prj, projectstatus prs, professions prf, clients cli
 WHERE prj.projectStatusID = prs.projectStatusID
@@ -875,7 +890,7 @@ SELECT usi.usersInformationID,
        usi.userID, 
        usi.firstName, 
        usi.lastName, 
-       DATE_FORMAT(usi.birthdate, '%d/%m/%y') AS birthdate, 
+       usi.birthdate, 
        usi.sexID,
        sex.sexName,
        usi.areaCode, 
@@ -1084,8 +1099,8 @@ SELECT bgt.budgetID,
        sty.sexCode,
        sty.sexName,
        pfl.stateProvinceID,
-      pfl.cityID,
-      pfl.streetAddress,
+       pfl.cityID,
+       pfl.streetAddress,
        pfl.lat,
        pfl.lng
 FROM budgets bgt,
@@ -1132,5 +1147,51 @@ INSERT INTO quieroservicios.budgets(
 
 END IF;
 
+END $$
+DELIMITER;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS prj_getProjectsByProfessionalID $$
+CREATE PROCEDURE prj_getProjectsByProfessionalID(IN _userID int)
+BEGIN
+
+SELECT prj.projectID, 
+       prj.projectName projectName, 
+       prj.clientID clientID,
+       usi.firstName,
+       usi.lastName,
+       cty.cityID,
+       cty.cityName,
+       stp.stateProvinceID,
+       stp.stateProvinceName,
+       cll.streetAddress,
+       cll.lat,
+       cll.lng,
+       prj.professionID professionID, 
+       prn.professionName professionName, 
+       prj.registerDate registerDate, 
+       prj.projectStatusID projectStatusID, 
+       prs.statusName statusName, 
+       prj.projectDescription projectDescription 
+FROM projects prj, 
+     projectstatus prs, 
+     professions prn, 
+     clients cli, 
+     clientLocation cll, 
+     userinformation usi, 
+     professionals prf,
+     projectprofessionals pjp,
+     cities cty,
+     stateprovinces stp
+WHERE prj.projectStatusID = prs.projectStatusID
+AND prj.clientID = cli.clientID
+AND cli.userID = usi.userID
+AND prj.professionID = prn.professionID
+AND prj.projectID = pjp.projectID
+AND pjp.professionalID = prf.professionalID
+AND cll.clientID = cli.clientID
+AND cll.stateProvinceID = stp.stateProvinceID
+AND cll.cityID = cty.cityID
+AND prf.userID = _userID;
 END $$
 DELIMITER;
