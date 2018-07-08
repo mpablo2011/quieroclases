@@ -105,11 +105,11 @@ CREATE TABLE clientLocation(
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-DROP TABLE IF EXISTS professionalLocation;
+DROP TABLE IF EXISTS professionaltLocation;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE professionalLocation(
-  professionalLocationID int not null,
+CREATE TABLE professionaltLocation(
+  professionaltLocationID int not null,
   professionalID int NOT NULL,
   professionalLocationStatusID int NOT NULL COMMENT '1 Vigente, 2 Historico' DEFAULT 1,
   countryID int NULL,
@@ -118,7 +118,7 @@ CREATE TABLE professionalLocation(
   streetAddress varchar(100)  NULL,
   lat FLOAT( 10, 6 ) NULL ,
   lng FLOAT( 10, 6 ) NULL,
-  PRIMARY KEY (professionalLocationID)
+  PRIMARY KEY (professionaltLocationID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -494,8 +494,8 @@ DROP TABLE IF EXISTS projectprofessionals;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE projectprofessionals(
 	projectprofessionalsID int NOT NULL AUTO_INCREMENT,
-  projectID int NOT NULL,
   professionalID int NOT NULL,
+	projectID int NOT NULL,
   PRIMARY KEY (projectprofessionalsID),
   UNIQUE KEY (professionalID, projectID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

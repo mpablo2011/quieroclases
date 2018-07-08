@@ -225,6 +225,56 @@ $app->get('/getBudgetsByProjectID/{projectID}', function (Request $request, Resp
 
 })->add($AuthUserPermisson);
 
+// Inserto un nuevo rol
+$app->post('/updateBudgetStatus', function (Request $request, Response $response) {
+    
+        // Preparar sentencia
+        $consulta = "call bgt_updateBudgetStatus(:budgetID; :budgetStatusID);";
+        
+        //Obtengo y limpio las variables
+        $budgetID = $request->getParam('budgetID');
+        $budgetID = clean_var($budgetID);
+        $budgetStatusID = $request->getParam('budgetStatusID');
+        $budgetStatusID = clean_var($budgetStatusID);
+
+        try {                
+                //Creo una nueva conexión
+                $conn = Database::getInstance()->getDb();
+                //Preparo la consulta
+                $comando = $conn->prepare($consulta);
+                //bindeo el parámetro a la consulta
+                $comando->bindValue(':budgetID', $budgetID);
+                $comando->bindValue(':budgetStatusID', $budgetStatusID);
+                // Ejecutar sentencia preparada
+                $comando->execute();
+                //Obtengo el arreglo de registros
+
+                //Armo la respuesta
+                $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+
+
+                //Elimino la conexión
+                $comando  = null;
+                $conn = null;
+        }  
+        catch (PDOException $e) 
+        {
+            if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));       
+        } 
+        catch (Exception $e) 
+        {
+        if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));       
+        }      
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
 // Verifico el token de la aplicación que invoca el servicio
 //$app->add($AuthAppKey);
 

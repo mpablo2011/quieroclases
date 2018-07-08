@@ -1133,7 +1133,7 @@ SET @professionalID = (SELECT professionalID FROM professionals where userID = _
 IF(@professionalID is not null)
 THEN
 
-INSERT INTO quieroservicios.budgets(
+INSERT INTO budgets(
    projectID
   ,professionalID
   ,amount
@@ -1193,5 +1193,42 @@ AND cll.clientID = cli.clientID
 AND cll.stateProvinceID = stp.stateProvinceID
 AND cll.cityID = cty.cityID
 AND prf.userID = _userID;
+END $$
+DELIMITER;
+
+
+-- Actualiza un presupuesto presupuesto
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS bgt_updateBudgetStatus $$
+CREATE PROCEDURE bgt_updateBudgetStatus(IN _budgetID int, in _budgetStatusID int)
+
+BEGIN
+-- Si se acepta un presupuesto cambio el estado del proyecto y el del resto de los presupuestos
+IF(_budgetStatusID = 2)
+THEN
+
+SET @projectID = (SELECT projectID FROM budgets where budgetID = _budgetID);
+
+UPDATE budgets bgt 
+SET bgt.budgetStatusID = 4
+WHERE bgt.projectID = @projectID
+AND bgt.budgetID <> _budgetID;
+
+UPDATE budgets bgt 
+SET bgt.budgetStatusID = _budgetStatusID
+WHERE bgt.budgetID = _budgetID;
+
+UPDATE projects SET projectStatusID = 2
+WHERE projectID = @projectID;
+
+ELSE
+
+UPDATE budgets bgt 
+SET bgt.budgetStatusID = _budgetStatusID
+WHERE bgt.budgetID = _budgetID;
+
+END IF;
+
 END $$
 DELIMITER;

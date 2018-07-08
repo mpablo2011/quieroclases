@@ -76,8 +76,11 @@ INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByProjectID',1);
 INSERT INTO roleGrants VALUES (null, '1', 'getBudgetsByProjectID/{projectID}',1);
 INSERT INTO roleGrants VALUES (null, '3', 'getBudgetsByProjectID/{projectID}',1);
 INSERT INTO roleGrants VALUES (null, '4', 'getBudgetsByProjectID/{projectID}',1);
-INSERT INTO roleGrants VALUES (null, '1', 'insertBudget}',2);
+INSERT INTO roleGrants VALUES (null, '1', 'insertBudget',2);
 INSERT INTO roleGrants VALUES (null, '4', 'insertBudget',2);
+INSERT INTO roleGrants VALUES (null, '1', 'updateBudgetStatus',2);
+INSERT INTO roleGrants VALUES (null, '3', 'updateBudgetStatus',2);
+
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,9 +154,9 @@ UNLOCK TABLES;
 LOCK TABLES budgetStatus WRITE;
 /*!40000 ALTER TABLE budgetStatus DISABLE KEYS */;
 INSERT INTO budgetStatus VALUES ('1','PENDIENTE','Presupuesto pendiente de cotización');
-INSERT INTO budgetStatus VALUES ('3','ACEPTADO','Presupuesto aceptado');
-INSERT INTO budgetStatus VALUES ('4','RECHAZADO','Presupuesto rechazado');
-INSERT INTO budgetStatus VALUES ('5','CERRADO','Servicio finalizado');
+INSERT INTO budgetStatus VALUES ('2','ACEPTADO','Presupuesto aceptado');
+INSERT INTO budgetStatus VALUES ('3','RECHAZADO','Presupuesto rechazado');
+INSERT INTO budgetStatus VALUES ('4','CERRADO','Servicio finalizado');
 /*!40000 ALTER TABLE budgetStatus ENABLE KEYS */;
 UNLOCK TABLES;
 
