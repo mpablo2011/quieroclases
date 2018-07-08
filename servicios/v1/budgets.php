@@ -275,6 +275,8 @@ $app->post('/updateBudgetStatus', function (Request $request, Response $response
     //Realizo el envío del mensaje
     return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 
+})->add($AuthUserPermisson);
+
 // Verifico el token de la aplicación que invoca el servicio
 //$app->add($AuthAppKey);
 
