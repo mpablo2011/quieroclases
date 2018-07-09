@@ -1120,7 +1120,7 @@ SELECT bgt.budgetID,
 FROM budgets bgt,
      budgetstatus bgs,
      professionals pfs,
-     professionaltLocation pfl,
+     professionalLocation pfl,
      userinformation usi,
      sextypes sty
 WHERE bgt.budgetStatusID = bgs.budgetStatusID
