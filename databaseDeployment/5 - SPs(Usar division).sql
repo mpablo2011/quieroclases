@@ -37,7 +37,7 @@ WHERE userID = _userID;
 
 END $$
 
-DELIMITER;
+
  
 -- Devuelve el listado de provincias
 DELIMITER $$
@@ -52,7 +52,7 @@ WHERE countryID = _countryID;
 
 
 END $$
-DELIMITER;
+
 
 -- Dado un ID devuelve la descripcion de la provincia
 
@@ -68,7 +68,7 @@ WHERE stateProvinceID = _stateProvinceID;
 
 
 END $$
-DELIMITER;
+
 
 
 -- Devuelve el listado de ciudades
@@ -83,7 +83,7 @@ FROM cities;
 
 
 END $$
-DELIMITER;
+
 
 -- Dado un ID devuelve la descripcion de la ciudad
 DELIMITER $$
@@ -98,7 +98,7 @@ WHERE cityID = _cityID;
 
 
 END $$
-DELIMITER;
+
 
 
 
@@ -115,7 +115,7 @@ WHERE stateProvinceID = _StateProvinceID;
 
 
 END $$
-DELIMITER;
+
 
 
 -- Devuelve el listado de roles de usuario
@@ -132,7 +132,7 @@ WHERE visibility = 1;
 
 
 END $$
-DELIMITER;
+
 
 
 -- Devuelve el listado de roles de un usuario
@@ -148,7 +148,7 @@ FROM userRoles
 WHERE userID = _userID;
 
 END $$
-DELIMITER;
+
 
 
 -- Devuelve el listado de estados del usuario
@@ -164,7 +164,7 @@ FROM userStatus;
 
 
 END $$
-DELIMITER;
+
 
 -- Actualiza el estado de un usuario
 
@@ -178,7 +178,7 @@ UPDATE users SET userStatusID = _userStatusID
 WHERE userID = _userID;
 
 END $$
-DELIMITER;
+
 
 
 -- Incrementa el failCount de un usuario ingresando por el mail del usuario
@@ -209,7 +209,7 @@ WHERE userID = @userID;
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 -- Incrementa el failCount de un usuario ingresando por el id del usuario
@@ -239,7 +239,7 @@ WHERE userID = _userID;
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 
@@ -278,7 +278,7 @@ ELSE
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 -- Asocia un rol a un usuario
@@ -295,7 +295,7 @@ VALUES
 (_userID, _roleID);
 
 END $$
-DELIMITER;
+
 
 
 -- Devuelve el listado de profesionales que trabajan en una determinada zona
@@ -314,7 +314,7 @@ AND   pp.professionID = _professionID;
 
 
 END $$
-DELIMITER;
+
 
 
 -- Inserta un nuevo profesional
@@ -331,7 +331,7 @@ VALUES
 (_userID);
 
 END $$
-DELIMITER;
+
 
 -- Inserta un nuevo cliente
 
@@ -347,7 +347,7 @@ VALUES
 (_userID);
 
 END $$
-DELIMITER;
+
 
 
 -- Genera una nueva asociacion entre un profesional y un lugar de trabajo
@@ -364,7 +364,7 @@ VALUES
 (_userID, _cityID);
 
 END $$
-DELIMITER;
+
 
 
 -- Genera una nueva asociacion entre un profesional y una profesion
@@ -381,7 +381,7 @@ VALUES
 (_professionalID, _professionID);
 
 END $$
-DELIMITER;
+
 
 
 -- Dado un userID devuelve el professionalID
@@ -398,7 +398,7 @@ WHERE userID = _userID;
 
 
 END $$
-DELIMITER;
+
 
 -- Inserto una nueva profesiÃ³n
 
@@ -413,7 +413,7 @@ VALUES
 (_professionName);
 
 END $$
-DELIMITER;
+
 
 -- Actualizo una profesiÃ³n
 
@@ -427,7 +427,7 @@ professionName = _professionName
 where professionID = _professionID;
 
 END $$
-DELIMITER;
+
 
 -- Elimino una profesion
 
@@ -439,7 +439,7 @@ BEGIN
 delete from professions where professionID = _professionID;
 
 END $$
-DELIMITER;
+
 
 -- Obtengo el listado de ciudades asociadas a un Id de provincia
 DELIMITER $$
@@ -452,7 +452,7 @@ FROM cities
 WHERE stateProvinceID = _StateProvinceID;
 
 END $$
-DELIMITER;
+
 
 
 -- Obtengo una profesion en base a su ID
@@ -467,7 +467,7 @@ FROM professions
 WHERE professionID = _professionID;
 
 END $$
-DELIMITER;
+
 
 
 -- Obtengo el listado de profesiones
@@ -481,9 +481,9 @@ SELECT professionID, professionName
 FROM professions;
 
 END $$
-DELIMITER;
 
---  Obtengo la información del usuario
+
+--  Obtengo la informaciï¿½n del usuario
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usr_getUser $$
@@ -497,18 +497,17 @@ WHERE  usr.userID = upw.userID
  AND    upw.userPasswordStatusID = 1;
 
 END $$
-DELIMITER;
+
 
 
 --  Inserto un nuevo usuario
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usr_insUser $$
-CREATE PROCEDURE usr_insUser(IN _usereMail varchar(100))
+CREATE PROCEDURE usr_insUser(IN userEmail varchar(100))
 BEGIN
 
-SET @userID = (SELECT userID FROM users where emailAddress = _usereMail);
-IF(@userID is null)
+IF(NOT EXISTS(SELECT * FROM users where emailAddress = userEmail))
 THEN
 
 INSERT INTO users(
@@ -524,16 +523,16 @@ INSERT INTO users(
 ) VALUES (
    NULL -- userID - IN int(11)
   ,1 -- userStatusID - ACTIVO
-  ,_usereMail -- emailAddress - IN varchar(100)
-  ,0   -- isAuthenticated - IN int(11)
-  ,NULL  -- authenticationDate - IN date
+  ,userEmail -- emailAddress - IN varchar(100)
+  ,1   -- isAuthenticated - IN int(11)
+  ,CURDATE()  -- authenticationDate - IN date
   ,CURDATE() -- registerDate - IN datetime
   ,NULL  -- lastUpdate - IN datetime
   ,CURDATE()  -- lastLoggin - IN datetime
   ,0   -- failCount - IN tinyint(4)
 );
 
-SELECT userID FROM users where emailAddress = _usereMail;
+SELECT userID FROM users where emailAddress = userEmail;
 
 ELSE
 
@@ -542,7 +541,7 @@ SELECT -1 userID FROM DUAL;
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 --  Inserta una nueva contrasenia
@@ -567,7 +566,7 @@ INSERT INTO quieroservicios.userpasswords(
 );
 
 END $$
-DELIMITER;
+
 
 
 --  Obtiene el listado de roles asociados a una ruta u objeto
@@ -583,9 +582,9 @@ WHERE object = _object;
 
 
 END $$
-DELIMITER;
 
--- inserta o actualiza la información del usuario
+
+-- inserta o actualiza la informaciï¿½n del usuario
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usi_insUserInformation $$
 CREATE PROCEDURE usi_insUserInformation(IN _userID int, IN _firstName varchar(100), IN _lastName varchar(100), IN _birthdate date,
@@ -630,7 +629,7 @@ WHERE userID = @userID;
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 DELIMITER $$
@@ -678,7 +677,7 @@ THEN
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 
@@ -697,7 +696,7 @@ AND prj.clientID = cli.clientID
 AND cli.userID = _userID;
 
 END $$
-DELIMITER;
+
 
 
 -- Elimino un proyecto
@@ -712,7 +711,7 @@ WHERE clientID = (select clientID from clients where userID = _userID)
 AND projectID = _projectID;
 
 END $$
-DELIMITER;
+
 
 -- Elimino un usuario
 
@@ -725,7 +724,7 @@ DELETE FROM users
 WHERE userID = _userID;
 
 END $$
-DELIMITER;
+
 
 -- Elimino las contrasenias del usuario
 
@@ -738,7 +737,7 @@ DELETE FROM usersPassword
 WHERE userID = _userID;
 
 END $$
-DELIMITER;
+
 
 -- Actualizo la posicion del usuario
 
@@ -750,7 +749,7 @@ BEGIN
 UPDATE usersinformation set lat = _lat, lng = _lng WHERE userID = _userID;
 
 END $$
-DELIMITER;
+
 
 
 -- Inserta un nuevo User Auth Token
@@ -777,7 +776,7 @@ INSERT INTO userauthenticationtoken(
 );
 
 END $$
-DELIMITER;
+
 
 
 -- Obtiene un AuthToken en base a un userID
@@ -795,10 +794,10 @@ SELECT userAuthenticationTokenID,
 FROM userauthenticationtoken;
 
 END $$
-DELIMITER;
 
 
--- Inserta una notificación pendiente
+
+-- Inserta una notificaciï¿½n pendiente
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS ntf_insertNotification $$
@@ -814,7 +813,7 @@ INSERT INTO notifications(
 );
 
 END $$
-DELIMITER;
+
 
 -- Devuelve el listado de notificaciones pendientes para envio de mails
 
@@ -830,7 +829,7 @@ AND ntf.notificationStatus = 1
 AND ntf.userID = usr.userID;
 
 END $$
-DELIMITER;
+
 
 
 -- Actualiza el estado de una notificacion por user id y tipo de notificacion
@@ -846,7 +845,7 @@ WHERE userID = _userID
 AND notificationType = _notificationType;
 
 END $$
-DELIMITER;
+
 
 -- Permite autenticar a un usuario
 
@@ -876,7 +875,7 @@ UPDATE userAuthenticationToken SET tokenStatus = 2 where userID = @userID AND to
 END IF;
 
 END $$
-DELIMITER;
+
 
 
 -- Obtengo la informacion un usuario
@@ -900,7 +899,7 @@ WHERE usi.userID = _userID
 AND sex.sexID = usi.sexID;
 
 END $$
-DELIMITER;
+
 
 -- Obtengo informacion de la tabla sexTypes
 DELIMITER $$
@@ -915,7 +914,7 @@ sex.SexName
 FROM sextypes sex;
 
 END $$
-DELIMITER;
+
 
 
 -- Obtengo la ubicacion del cliente
@@ -938,7 +937,7 @@ WHERE cll.clientID = cli.userID
 AND cli.userID = _userID;
 
 END $$
-DELIMITER;
+
 
 -- Obtengo la ubicacion del profesional
 DELIMITER $$
@@ -960,7 +959,7 @@ WHERE pfl.professionalID = pfs.professionalID
 AND pfs.userID = _userID;
 
 END $$
-DELIMITER;
+
 
 
 -- inserta o actualiza la ubicacion de un cliente
@@ -1017,7 +1016,7 @@ WHERE clientLocationID = @clientLocationID;
 END IF;
 
 END $$
-DELIMITER;
+
 
 -- inserta o actualiza la ubicacion de un profesional
 DELIMITER $$
@@ -1073,7 +1072,7 @@ WHERE professionalLocationID = @professionalLocationID;
 END IF;
 
 END $$
-DELIMITER;
+
 
 -- Dado un projectID, devuelve los presupuestos.
 
@@ -1119,12 +1118,12 @@ AND pfs.professionalID = pfl.professionalID;
 
 END $$
 
-DELIMITER;
+
 
 -- Inserta un nuevo presupuesto
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS pfl_insertProfessional $$
+DROP PROCEDURE IF EXISTS bgt_insBudget $$
 CREATE PROCEDURE bgt_insBudget(IN _projectID int, IN _userID int, IN _amount bigint, IN _comments text)
 
 BEGIN
@@ -1148,7 +1147,7 @@ INSERT INTO budgets(
 END IF;
 
 END $$
-DELIMITER;
+
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS prj_getProjectsByProfessionalID $$
@@ -1194,7 +1193,7 @@ AND cll.stateProvinceID = stp.stateProvinceID
 AND cll.cityID = cty.cityID
 AND prf.userID = _userID;
 END $$
-DELIMITER;
+
 
 
 -- Actualiza un presupuesto presupuesto
@@ -1231,4 +1230,4 @@ WHERE bgt.budgetID = _budgetID;
 END IF;
 
 END $$
-DELIMITER;
+
