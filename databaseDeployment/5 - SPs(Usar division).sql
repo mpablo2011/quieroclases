@@ -1245,3 +1245,33 @@ WHERE bgt.budgetID = _budgetID;
 END IF;
 
 END $$
+
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS prj_insProjectByUserID $$
+CREATE PROCEDURE prf_insProfessionalProfession(in _userID int, in _professionID int)
+BEGIN
+
+SET @professionalID = (SELECT professionalID FROM professionals WHERE userID = _userID);
+
+SET @existprofessionalProfession = (select count(*) from professionalProfessions where professionalID = _userID and professionID = @professionalID);
+
+IF(@existprofessionalProfession > 0)
+THEN
+      SELECT -1 as status FROM DUAL;
+ELSE
+
+
+      INSERT INTO professionalprofessions (
+                             professionalID
+                            ,professionID
+                          ) VALUES (
+                            @professionalID
+                            ,_professionID
+                          );
+                          
+      SELECT 1 as status FROM DUAL;
+      
+END IF;
+
+END $$
