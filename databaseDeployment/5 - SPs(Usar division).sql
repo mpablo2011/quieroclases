@@ -640,9 +640,16 @@ BEGIN
 
 CREATE TEMPORARY TABLE prfID 
 SELECT prf.professionalID 
-FROM professionals prf, professionalprofessions prn 
+FROM professionals prf, professionalprofessions prn, professionalLocation pfl,
+     clients cli, clientlocation cll
 WHERE prf.professionalID = prn.professionalID
-AND prn.professionID = _professionID;
+AND cli.clientID = cll.clientID
+AND prf.professionalID = pfl.professionalID
+AND cll.countryID = pfl.countryID
+AND cll.stateProvinceID = pfl.stateProvinceID
+AND cll.cityID = pfl.cityID
+AND prn.professionID = _professionID
+AND cli.userID = _userID;
 
 SET @existprofessionals = (select count(*) from prfID);
 
@@ -676,12 +683,12 @@ THEN
       
       DROP TABLE prfID;
       
-      SELECT 1 as status FROM DUAL;
+      SELECT @projectID as projectID FROM DUAL;
 
     END IF;
 ELSE
       DROP TABLE prfID;  
-      SELECT -1 as status FROM DUAL;
+      SELECT -1 as projectID FROM DUAL;
 END IF;
 
 END $$

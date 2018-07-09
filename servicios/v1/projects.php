@@ -171,11 +171,12 @@ if ($userID != '' && $professionID != '' && $projectName != '')
 
         // Ejecutar sentencia preparada
         $comando->execute();
-        $data = $comando->fetch(PDO::FETCH_ASSOC);
+        $values = $comando->fetch(PDO::FETCH_ASSOC);
 
-        if($data["status"] == 1)
+        if($values["projectID"] > 0)
         {
             $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+            $respuesta["values"] = $values;
         }
         else
         {
