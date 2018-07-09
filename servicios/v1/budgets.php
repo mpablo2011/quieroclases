@@ -93,7 +93,7 @@ $app->post('/insertBudget', function (Request $request, Response $response) {
     //Obtengo y limpio las variables
     $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
     
-    $projectID = $request->getAttribute('projectID');
+    $projectID = $request->getParam('projectID');
     $projectID = clean_var($projectID);
 
     $amount = $request->getParam('amount');
