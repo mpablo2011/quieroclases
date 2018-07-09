@@ -1048,7 +1048,7 @@ INSERT INTO professionals (userID) VALUES (_userID);
 SET @professionalID = (SELECT professionalID FROM professionals where userID = _userID);
 END IF;
 
-SET @professionalLocationID = (SELECT professionalLocationID FROM cprofessionalLocation where professionalID = @professionalID);
+SET @professionalLocationID = (SELECT professionalLocationID FROM professionalLocation where professionalID = @professionalID);
 
 IF(@professionalLocationID is null)
 THEN

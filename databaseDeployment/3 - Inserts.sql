@@ -2923,7 +2923,7 @@ INSERT INTO userpasswords(
   ,userPassword
   ,registerDate
 ) VALUES (
-   'ADMIN' -- userPasswordID - IN int(11)
+   1 -- userPasswordID - IN int(11)
   ,1 -- userID - IN int(11)
   ,1 -- userPasswordStatusID - IN int(11)
   ,'ADMIN' -- userPassword - IN varchar(50)
