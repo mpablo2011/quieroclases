@@ -483,7 +483,7 @@ FROM professions;
 END $$
 
 
---  Obtengo la informaci�n del usuario
+--  Obtengo la informacion del usuario
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usr_getUser $$
@@ -504,10 +504,11 @@ END $$
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usr_insUser $$
-CREATE PROCEDURE usr_insUser(IN userEmail varchar(100))
+CREATE PROCEDURE usr_insUser(IN _usereMail varchar(100))
 BEGIN
 
-IF(NOT EXISTS(SELECT * FROM users where emailAddress = userEmail))
+SET @userID = (SELECT userID FROM users where emailAddress = _usereMail);
+IF(@userID is null)
 THEN
 
 INSERT INTO users(
@@ -523,7 +524,7 @@ INSERT INTO users(
 ) VALUES (
    NULL -- userID - IN int(11)
   ,1 -- userStatusID - ACTIVO
-  ,userEmail -- emailAddress - IN varchar(100)
+  ,_usereMail -- emailAddress - IN varchar(100)
   ,1   -- isAuthenticated - IN int(11)
   ,CURDATE()  -- authenticationDate - IN date
   ,CURDATE() -- registerDate - IN datetime
@@ -532,7 +533,7 @@ INSERT INTO users(
   ,0   -- failCount - IN tinyint(4)
 );
 
-SELECT userID FROM users where emailAddress = userEmail;
+SELECT userID FROM users where emailAddress = _usereMail;
 
 ELSE
 
@@ -584,7 +585,7 @@ WHERE object = _object;
 END $$
 
 
--- inserta o actualiza la informaci�n del usuario
+-- inserta o actualiza la informacion del usuario
 DELIMITER $$
 DROP PROCEDURE IF EXISTS usi_insUserInformation $$
 CREATE PROCEDURE usi_insUserInformation(IN _userID int, IN _firstName varchar(100), IN _lastName varchar(100), IN _birthdate date,
@@ -672,16 +673,23 @@ THEN
       
       INSERT INTO projectprofessionals (projectID, professionalID)
       SELECT @projectID, professionalID FROM prfID;
+      
+      DROP TABLE prfID;
+      
+      SELECT 1 as status FROM DUAL;
 
     END IF;
+ELSE
+      DROP TABLE prfID;  
+      SELECT -1 as status FROM DUAL;
 END IF;
 
 END $$
 
 
 
-
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS prj_getProjectsByUserID $$
 CREATE PROCEDURE prj_getProjectsByUserID(IN _userID int)
 BEGIN
@@ -797,7 +805,7 @@ END $$
 
 
 
--- Inserta una notificaci�n pendiente
+-- Inserta una notificacion pendiente
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS ntf_insertNotification $$
@@ -1230,4 +1238,3 @@ WHERE bgt.budgetID = _budgetID;
 END IF;
 
 END $$
-
