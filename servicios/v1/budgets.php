@@ -229,7 +229,7 @@ $app->get('/getBudgetsByProjectID/{projectID}', function (Request $request, Resp
 $app->post('/updateBudgetStatus', function (Request $request, Response $response) {
     
         // Preparar sentencia
-        $consulta = "call bgt_updateBudgetStatus(:budgetID; :budgetStatusID);";
+        $consulta = "call bgt_updateBudgetStatus(:budgetID, :budgetStatusID);";
         
         //Obtengo y limpio las variables
         $budgetID = $request->getParam('budgetID');
