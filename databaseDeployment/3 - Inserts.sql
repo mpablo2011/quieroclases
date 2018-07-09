@@ -89,7 +89,7 @@ UNLOCK TABLES;
 -- Dumping data for table sexTypes
 --
 LOCK TABLES sexTypes WRITE;
-/*!40000 ALTER TABLE sex DISABLE KEYS */;
+/*!40000 ALTER TABLE sexTypes DISABLE KEYS */;
 INSERT INTO sexTypes VALUES ('1','M','Masculino');
 INSERT INTO sexTypes VALUES ('2','F','Femenino');
 /*!40000 ALTER TABLE sexTypes ENABLE KEYS */;
@@ -2923,7 +2923,7 @@ INSERT INTO userpasswords(
   ,userPassword
   ,registerDate
 ) VALUES (
-   'ADMIN' -- userPasswordID - IN int(11)
+   1 -- userPasswordID - IN int(11)
   ,1 -- userID - IN int(11)
   ,1 -- userPasswordStatusID - IN int(11)
   ,'ADMIN' -- userPassword - IN varchar(50)
