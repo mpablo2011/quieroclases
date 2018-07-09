@@ -214,6 +214,85 @@ else
 
 })->add($AuthUserPermisson);
 
+// Inserto una nueva profesion
+$app->post('/insertProfessionalProfession', function (Request $request, Response $response) {
+
+
+    //Obtengo y limpio las variables
+    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
+
+    $professionID = $request->getParam('professionID');
+    $professionID = clean_var($professionID);
+
+if ($userID != '' && $professionID != '')
+{
+    try {
+
+        // Preparar sentencia
+        $consulta = "call prf_insProfessionalProfession(:userID, :professionID);";
+
+        //Creo una nueva conexión
+        $conn = Database::getInstance()->getDb();
+        //Preparo la consulta
+        $comando = $conn->prepare($consulta);
+        //bindeo el parámetro a la consulta
+        $comando->bindValue(':userID', $userID);
+        $comando->bindValue(':professionID', $professionID);
+
+        // Ejecutar sentencia preparada
+        $comando->execute();
+        $values = $comando->fetch(PDO::FETCH_ASSOC);
+
+        if($values["status"] == 1)
+        {
+            $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+        }
+        else
+        {
+            $respuesta["status"] = array("code" => 918, "description" => requestStatus(918)); //OK
+        }
+
+
+        //Elimino la conexión
+        $comando  = null;
+        $conn = null;
+    }
+    catch (PDOException $e)
+    {
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+        {
+            switch ($comando->errorCode()) {
+                case '23000':
+                    $respuesta["status"] = array("code" => 23003, "description" => requestStatus(23003));
+                    break;
+                
+                default:
+                   $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+                    break;
+            };
+            
+        }
+    }
+    catch (Exception $e)
+    {
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+    }
+}
+else
+{
+    $respuesta["status"] = array("code" => 907, "description" => requestStatus(907));
+}
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
+
 
 //Ejecución de la sentencia del FW NO BORRAR
 $app->run();

@@ -93,7 +93,7 @@ $app->post('/insertBudget', function (Request $request, Response $response) {
     //Obtengo y limpio las variables
     $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
     
-    $projectID = $request->getAttribute('projectID');
+    $projectID = $request->getParam('projectID');
     $projectID = clean_var($projectID);
 
     $amount = $request->getParam('amount');
@@ -229,7 +229,7 @@ $app->get('/getBudgetsByProjectID/{projectID}', function (Request $request, Resp
 $app->post('/updateBudgetStatus', function (Request $request, Response $response) {
     
         // Preparar sentencia
-        $consulta = "call bgt_updateBudgetStatus(:budgetID; :budgetStatusID);";
+        $consulta = "call bgt_updateBudgetStatus(:budgetID, :budgetStatusID);";
         
         //Obtengo y limpio las variables
         $budgetID = $request->getParam('budgetID');

@@ -171,16 +171,18 @@ if ($userID != '' && $professionID != '' && $projectName != '')
 
         // Ejecutar sentencia preparada
         $comando->execute();
+        $values = $comando->fetch(PDO::FETCH_ASSOC);
 
-        //Armo la respuesta
-        if($comando->rowCount() == 1)
+        if($values["projectID"] > 0)
         {
             $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+            $respuesta["values"] = $values;
         }
         else
         {
-            $respuesta["status"] = array("code" => 408, "description" => requestStatus(408));
+            $respuesta["status"] = array("code" => 408, "description" => requestStatus(408)); //OK
         }
+
 
         //Elimino la conexión
         $comando  = null;
