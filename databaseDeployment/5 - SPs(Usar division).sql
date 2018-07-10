@@ -1368,12 +1368,13 @@ END $$
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS cls_getClientPendingScores $$
-CREATE PROCEDURE cls_getClientPendingScores(IN _clientID int)
+CREATE PROCEDURE cls_getClientPendingScores(IN _userID int)
 BEGIN
 
 SELECT prj.projectID
-FROM projects prj
-WHERE prj.clientID = _clientID
+FROM projects prj 
+INNER JOIN clients cli ON cli.clientID = prj.clientID 
+WHERE cli.userID = _userID
 AND prj.projectID NOT IN (SELECT projectID from professionalscores)
 AND prj.projectStatusID = 4;
 
@@ -1383,7 +1384,7 @@ END $$
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pfs_getProfessionalPendingScores $$
-CREATE PROCEDURE cls_getPendingScores(IN _professionalID int)
+CREATE PROCEDURE cls_getPendingScores(IN _userID int)
 BEGIN
 
 SELECT prj.projectID
