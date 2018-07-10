@@ -168,20 +168,19 @@ else
 })->add($AuthUserPermisson);
 
 // obtengo todos los proyectos de un usuario
-$app->post('/getClientPendingScores', function (Request $request, Response $response) {
+$app->get('/getClientPendingScores', function (Request $request, Response $response) {
 
-    $clientID = $request->getParam('clientID');
-    $clientID = clean_var($clientID);
+    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
 
     try {
         // Preparar sentencia
-        $consulta = "call cls_getClientPendingScores(:clientID);";
+        $consulta = "call cls_getClientPendingScores(:userID);";
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':userID', $userID);
 
         // Ejecutar sentencia preparada
         $comando->execute();
