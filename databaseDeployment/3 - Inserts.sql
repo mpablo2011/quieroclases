@@ -5,8 +5,8 @@ LOCK TABLES roles WRITE;
 /*!40000 ALTER TABLE roles DISABLE KEYS */;
 INSERT INTO roles VALUES ('1','ADMIN','Administrador', 0);
 INSERT INTO roles VALUES ('2','GUEST','Invitado', 0);
-INSERT INTO roles VALUES ('3','CLIENT','Cliente', 1);
-INSERT INTO roles VALUES ('4','PROFESSIONAL','Profesional', 1);
+INSERT INTO roles VALUES ('3','CLIENT','Alumno', 1);
+INSERT INTO roles VALUES ('4','PROFESSIONAL','Profesor', 1);
 /*!40000 ALTER TABLE roles ENABLE KEYS */;
 UNLOCK TABLES;
 

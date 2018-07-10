@@ -981,7 +981,7 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS cli_insClientLocation $$
 CREATE PROCEDURE cli_insClientLocation(IN _userID int, IN _countryID int, IN _stateProvinceID int, IN _cityID int,
-in _streetAddress varchar(100), IN _lat int, IN _lng int)
+in _streetAddress varchar(100), IN _lat float, IN _lng float)
 BEGIN
 
 SET @clientID = (SELECT clientID FROM clients where userID = _userID);
@@ -1037,7 +1037,7 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pfl_insProfessionalLocation $$
 CREATE PROCEDURE pfl_insProfessionalLocation(IN _userID int, IN _countryID int, IN _stateProvinceID int, IN _cityID int,
-in _streetAddress varchar(100), IN _lat int, IN _lng int)
+in _streetAddress varchar(100), IN _lat float, IN _lng float)
 BEGIN
 
 SET @professionalID = (SELECT professionalID FROM professionals where userID = _userID);
