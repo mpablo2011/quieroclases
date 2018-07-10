@@ -225,11 +225,12 @@ else
 })->add($AuthUserPermisson);
 
 // Elimino un proyecto por su id
-$app->delete('/deleteproject', function (Request $request, Response $response) {
+$app->delete('/deleteproject/{projectID}', function (Request $request, Response $response) {
     
     //Obtengo y limpio las variables
     $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
-    $projectID = $request->getParam('projectID');
+    
+    $projectID = $request->getAttribute('projectID');
     $projectID = clean_var($projectID);
 
     if ($userID != '' && $projectID != '')
