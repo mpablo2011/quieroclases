@@ -1280,7 +1280,7 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS cls_getClientScores $$
 
-CREATE PROCEDURE cls_getClientScores()
+CREATE PROCEDURE cls_getClientScores(in _userID int)
 BEGIN
 
 SELECT u.firstName, u.lastName, s.ScoreDescription, cs.comments FROM clientscores cs
@@ -1323,20 +1323,19 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS cls_insProfessionalScore $$
 
-CREATE PROCEDURE cls_insProfessionalScore(IN _userId int, IN _scoreId int, IN _comments varchar(200))
+CREATE PROCEDURE pfs_insProfessionalScore(IN _professionalID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN
 
-set @clientId = (select clientid from clients where userid =_userId );
 
 INSERT INTO professionalscores
-(clientId, scoreid, comments)
+(professionalID, scoreID, projectID, comments)
 values 
-(@clientId, _scoreId,_comments);
+(_professionalID, _scoreID, _projectID, _comments);
 
 END $$
 
 
--- Elimiina una relacion profesional profesion
+-- Elimina una relacion profesional profesion
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS prf_deleteProfessionalProfession $$

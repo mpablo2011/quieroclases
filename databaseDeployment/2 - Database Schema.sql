@@ -220,8 +220,9 @@ DROP TABLE IF EXISTS professionalScores;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE professionalScores (
   professionalScoreID int NOT NULL AUTO_INCREMENT,
-  scoreID int NOT NULL COMMENT 'Identificador único del score.',
-  clientID int NOT NULL,
+  scoreID int NOT NULL COMMENT 'Identificador unico del score.',
+  professionalID int NOT NULL,
+  projectID int NOT NULL,
   comments text COMMENT 'Comentarios.',
   PRIMARY KEY (professionalScoreID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

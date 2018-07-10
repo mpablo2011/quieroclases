@@ -84,6 +84,11 @@ INSERT INTO roleGrants VALUES (null, '1', 'deleteProfessionalProfession',4);
 INSERT INTO roleGrants VALUES (null, '4', 'deleteProfessionalProfession',4);
 INSERT INTO roleGrants VALUES (null, '1', 'insertProfessionalProfession',2);
 INSERT INTO roleGrants VALUES (null, '3', 'insertProfessionalProfession',2);
+INSERT INTO roleGrants VALUES (null, '1', 'getProfessionalScores',1);
+INSERT INTO roleGrants VALUES (null, '3', 'getProfessionalScores',1);
+INSERT INTO roleGrants VALUES (null, '4', 'getProfessionalScores',1);
+INSERT INTO roleGrants VALUES (null, '1', 'insertProfessionalProfession',1);
+INSERT INTO roleGrants VALUES (null, '3', 'insertProfessionalProfession',1);
 
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;

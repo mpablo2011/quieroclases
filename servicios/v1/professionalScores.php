@@ -79,29 +79,28 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 // Inserto un nuevo proyecto
 $app->post('/insertProfessionalScore', function (Request $request, Response $response) {
 
+    $professionalID = $request->getParam('professionalID');
+    $professionalID = clean_var($professionalID);
 
-    //Obtengo y limpio las variables
-    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
-
-    $scoreId = $request->getParam('scoreId');
-    $scoreId = clean_var($scoreId);
+    $scoreID = $request->getParam('scoreID');
+    $scoreID = clean_var($scoreID);
 
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
 
-if ($userID != '' && $scoreId != '')
+if ($professionalID != '' && $scoreID != '')
 {
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insProfessionalScore(:userID, :scoreId, :comments);";
+        $consulta = "call cls_insProfessionalScore(:professionalID, :scoreID, :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':userID', $userID);
+        $comando->bindValue(':professionalID', $professionalID);
         $comando->bindValue(':scoreId', $scoreId);
         $comando->bindValue(':comments', $comments);
 
