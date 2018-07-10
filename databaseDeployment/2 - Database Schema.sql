@@ -204,7 +204,8 @@ DROP TABLE IF EXISTS clientScores;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE clientScores (
   clientScoreID int NOT NULL AUTO_INCREMENT,
-  scoreID int NOT NULL COMMENT 'Identificador único del score.',
+  scoreID int NOT NULL COMMENT 'Identificador unico del score.',
+  projectID int NOT NULL,
   clientID int NOT NULL,
   comments text COMMENT 'Comentarios.',
   PRIMARY KEY (clientScoreID)

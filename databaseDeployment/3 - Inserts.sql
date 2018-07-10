@@ -89,6 +89,11 @@ INSERT INTO roleGrants VALUES (null, '3', 'getProfessionalScores',1);
 INSERT INTO roleGrants VALUES (null, '4', 'getProfessionalScores',1);
 INSERT INTO roleGrants VALUES (null, '1', 'insertProfessionalProfession',1);
 INSERT INTO roleGrants VALUES (null, '3', 'insertProfessionalProfession',1);
+INSERT INTO roleGrants VALUES (null, '1', 'getClientScores',1);
+INSERT INTO roleGrants VALUES (null, '3', 'getClientScores',1);
+INSERT INTO roleGrants VALUES (null, '4', 'getClientScores',1);
+INSERT INTO roleGrants VALUES (null, '1', 'insertClientScore',1);
+INSERT INTO roleGrants VALUES (null, '4', 'insertClientScore',1);
 
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;

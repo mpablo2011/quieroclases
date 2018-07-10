@@ -79,11 +79,14 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 $app->post('/insertClientScore', function (Request $request, Response $response) {
 
 
-    //Obtengo y limpio las variables
-    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
+    $clientID = $request->getParam('clientID');
+    $clientID = clean_var($clientID);
 
-    $scoreId = $request->getParam('scoreId');
-    $scoreId = clean_var($scoreId);
+    $scoreID = $request->getParam('scoreID');
+    $scoreID = clean_var($scoreID);
+
+    $projectID = $request->getParam('projectID');
+    $projectID = clean_var($projectID);
 
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
@@ -93,15 +96,16 @@ if ($userID != '' && $scoreId != '')
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insClientScore(:userID, :scoreId, :comments);";
+        $consulta = "call cls_insClientScore(:clientID, :scoreID, :projectID :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':userID', $userID);
-        $comando->bindValue(':scoreId', $scoreId);
+        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':scoreID', $scoreID);
+        $comando->bindValue(':projectID', $projectID);
         $comando->bindValue(':comments', $comments);
 
         // Ejecutar sentencia preparada

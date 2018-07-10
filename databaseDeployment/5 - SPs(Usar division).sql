@@ -1293,15 +1293,20 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS cls_insClientScore $$
 
-CREATE PROCEDURE cls_insClientScore(IN _userId int, IN _scoreId int, IN _comments varchar(200))
+CREATE PROCEDURE cls_insClientScore(IN _clientID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN
 
-set @clientId = (select clientid from clients where userid =_userId );
-
-INSERT INTO clientScores
-(clientId, scoreid, comments)
-values 
-(@clientId, _scoreId,_comments);
+INSERT INTO quieroservicios.clientscores(
+   scoreID
+  ,clientID
+  ,projectID
+  ,comments
+) VALUES (
+   _scoreID
+  ,_clientID
+  , _projectID
+  ,_comments
+);
 
 END $$
 
