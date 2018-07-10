@@ -217,6 +217,11 @@ $app->get('/getClientPendingScores', function (Request $request, Response $respo
             $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
     }
 
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
 // Verifico el token de la aplicación que invoca el servicio
 //$app->add($AuthAppKey);
 
