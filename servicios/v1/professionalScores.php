@@ -85,6 +85,9 @@ $app->post('/insertProfessionalScore', function (Request $request, Response $res
     $scoreID = $request->getParam('scoreID');
     $scoreID = clean_var($scoreID);
 
+    $projectID = $request->getParam('projectID');
+    $projectID = clean_var($projectID);
+
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
 
@@ -93,7 +96,7 @@ if ($professionalID != '' && $scoreID != '')
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insProfessionalScore(:professionalID, :scoreID, :comments);";
+        $consulta = "call pfs_insProfessionalScore(:professionalID, :scoreID, :projectID :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
@@ -101,7 +104,8 @@ if ($professionalID != '' && $scoreID != '')
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
         $comando->bindValue(':professionalID', $professionalID);
-        $comando->bindValue(':scoreId', $scoreId);
+        $comando->bindValue(':scoreID', $scoreII);
+        $comando->bindValue(':projectID', $projectID);
         $comando->bindValue(':comments', $comments);
 
         // Ejecutar sentencia preparada
