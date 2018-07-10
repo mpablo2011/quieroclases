@@ -352,6 +352,62 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 
 })->add($AuthUserPermisson);
 
+// obtengo todas las profesiones
+$app->get('/getProfessionalProfessions', function (Request $request, Response $response) {
+    
+        // Preparar sentencia
+        $consulta = "call pfl_getProfessionalProfessions();";
+
+        $professionalID = $request->getParam('professionalID');
+        $professionalID = clean_var($professionalID);
+
+        try {
+                //Creo una nueva conexión
+                $conn = Database::getInstance()->getDb();
+                //Preparo la consulta
+                $comando = $conn->prepare($consulta);
+                //bindeo el parámetro a la consulta
+                $comando->bindValue(':professionalID', $professionalID);
+                // Ejecutar sentencia preparada
+                $comando->execute();
+                //Obtengo el arreglo de registros
+                $values = $comando->fetchAll(PDO::FETCH_ASSOC);
+
+                //Armo la respuesta
+                if($values)
+                {
+                    $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+                    $respuesta["values"] = $values;
+                }
+                else
+                {
+                    $respuesta["status"] = array("code" => 502, "description" => requestStatus(502)); // No data found
+                }
+
+                //Elimino la conexión
+                $comando  = null;
+                $conn = null;
+        }  
+        catch (PDOException $e) 
+        {
+            if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));       
+        } 
+        catch (Exception $e) 
+        {
+        if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));       
+        }      
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+});
+
 //Ejecución de la sentencia del FW NO BORRAR
 $app->run();
 ?>

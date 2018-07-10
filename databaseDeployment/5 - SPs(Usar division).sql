@@ -1395,3 +1395,16 @@ AND bgt.professionalID = _professionalID
 AND prj.projectStatusID = 4;
 
 END $$
+
+-- Obtiene las profesiones de un profesional
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfl_getProfessionalProfessions $$
+CREATE PROCEDURE pfl_getProfessionalProfessions(IN _professionalID int)
+BEGIN
+
+SELECT pfn.professionID, pfn.professionName FROM professionalprofessions pfp, professions pfn
+WHERE pfp.professionID = pfn.professionID
+AND pfp.professionalID = _professionalID;
+
+END $$
