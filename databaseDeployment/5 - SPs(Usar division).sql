@@ -1307,21 +1307,22 @@ END $$
 
 -- Devuelve el listado de scores de cada profesional
 DELIMITER $$
-DROP PROCEDURE IF EXISTS cls_getProfessionalScores $$
+DROP PROCEDURE IF EXISTS pfs_getProfessionalScores $$
 
-CREATE PROCEDURE cls_getProfessionalScores()
+CREATE PROCEDURE pfs_getProfessionalScores(IN _professionalID int)
 BEGIN
 
-SELECT u.firstName, u.lastName, s.ScoreDescription, ps.comments FROM professionalscores ps
-inner join scores s ON ps.scoreID = s.ScoreID
-INNER join clients c on c.clientID = ps.clientID
-inner join userinformation u on c.userID = u.userID;
+SELECT pfs.scoreID, pfs.professionalID, pfs.projectID, pfs.comments,
+       prj.projectName, prj.projectDescription
+FROM professionalscores pfs, projects prj
+WHERE pfs.projectID = prj.projectID
+AND pfs.professionalID = _professionalID;
 
 END $$
 
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS cls_insProfessionalScore $$
+DROP PROCEDURE IF EXISTS pfs_insProfessionalScore $$
 
 CREATE PROCEDURE pfs_insProfessionalScore(IN _professionalID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN

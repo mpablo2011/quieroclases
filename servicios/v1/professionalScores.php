@@ -28,13 +28,19 @@ $app = new \Slim\App();
 $app->get('/getProfessionalScores', function (Request $request, Response $response) {
     
     // Preparar sentencia
-   $consulta = "call cls_getProfessionalScores();";
+   $consulta = "call pfs_getProfessionalScores(:professionalID);";
+
+    $professionalID = $request->getParam('professionalID');
+    $professionalID = clean_var($professionalID);
 
    try {
-           //Creo una nueva conexión
+          //Creo una nueva conexión
            $conn = Database::getInstance()->getDb();
            //Preparo la consulta
            $comando = $conn->prepare($consulta);
+           //bindeo el parámetro a la consulta
+           $comando->bindValue(':professionalID', $professionalID);
+
            // Ejecutar sentencia preparada
            $comando->execute();
            //Obtengo el arreglo de registros
@@ -118,7 +124,7 @@ if ($professionalID != '' && $scoreID != '')
         }
         else
         {
-            $respuesta["status"] = array("code" => 408, "description" => requestStatus(408));
+            $respuesta["status"] = array("code" => 410, "description" => requestStatus(410));
         }
 
         //Elimino la conexión
