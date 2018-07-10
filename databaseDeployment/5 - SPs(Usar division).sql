@@ -1334,3 +1334,17 @@ values
 (@clientId, _scoreId,_comments);
 
 END $$
+
+
+-- Elimiina una relacion profesional profesion
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS prf_deleteProfessionalProfession $$
+CREATE PROCEDURE prf_deleteProfessionalProfession(IN _userID int, IN _professionID int)
+BEGIN
+
+SET @professionalID = (SELECT professionalID FROM professionals WHERE userID = _userID);
+
+DELETE FROM professionalprofessions WHERE professionID = _professionID AND professionalID = @professionalID;
+
+END $$

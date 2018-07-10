@@ -80,6 +80,10 @@ INSERT INTO roleGrants VALUES (null, '1', 'insertBudget',2);
 INSERT INTO roleGrants VALUES (null, '4', 'insertBudget',2);
 INSERT INTO roleGrants VALUES (null, '1', 'updateBudgetStatus',2);
 INSERT INTO roleGrants VALUES (null, '3', 'updateBudgetStatus',2);
+INSERT INTO roleGrants VALUES (null, '1', 'deleteProfessionalProfession',4);
+INSERT INTO roleGrants VALUES (null, '4', 'deleteProfessionalProfession',4);
+INSERT INTO roleGrants VALUES (null, '1', 'insertProfessionalProfession',2);
+INSERT INTO roleGrants VALUES (null, '3', 'insertProfessionalProfession',2);
 
 /*!40000 ALTER TABLE roleGrants ENABLE KEYS */;
 UNLOCK TABLES;

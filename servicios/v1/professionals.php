@@ -294,6 +294,64 @@ else
 })->add($AuthUserPermisson);
 
 
+// Elimino un proyecto por su id
+$app->delete('/deleteProfessionalProfession', function (Request $request, Response $response) {
+    
+    //Obtengo y limpio las variables
+    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
+    $professionID = $request->getParam('professionID');
+    $professionID = clean_var($professionID);
+
+    if ($userID != '' && $professionID != '')
+    {
+        try {
+                // Preparar sentencia
+                $consulta = "call prf_deleteProfessionalProfession(:userID, :projectID);";
+
+                //Creo una nueva conexión
+                $conn = Database::getInstance()->getDb();
+                //Preparo la consulta
+                $comando = $conn->prepare($consulta);
+                //bindeo el parámetro a la consulta
+                $comando->bindValue(':userID', $userID);
+                $comando->bindValue(':projectID', $professionID);
+                // Ejecutar sentencia preparada
+                $comando->execute();
+                //Obtengo el arreglo de registros
+
+                //Armo la respuesta
+                $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+
+
+                //Elimino la conexión
+                $comando  = null;
+                $conn = null;
+        }  
+        catch (PDOException $e) 
+        {
+            if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));       
+        } 
+        catch (Exception $e) 
+        {
+        if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));       
+        }      
+}
+else
+{
+    $respuesta["status"] = array("code" => 907, "description" => requestStatus(907));
+}
+
+//Realizo el envío del mensaje
+return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
+
 //Ejecución de la sentencia del FW NO BORRAR
 $app->run();
 ?>
