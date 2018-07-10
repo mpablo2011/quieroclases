@@ -25,7 +25,7 @@ $app = new \Slim\App();
 
 
 // obtengo todas las profesiones
-$app->get('/getClientScores', function (Request $request, Response $response) {
+$app->post('/getClientScores', function (Request $request, Response $response) {
     
     // Preparar sentencia
    $consulta = "call cls_getClientScores(:clientID);";
@@ -167,8 +167,59 @@ else
 
 })->add($AuthUserPermisson);
 
+// obtengo todos los proyectos de un usuario
+$app->post('/getClientPendingScores', function (Request $request, Response $response) {
+
+    $clientID = $request->getParam('clientID');
+    $clientID = clean_var($clientID);
+
+    try {
+        // Preparar sentencia
+        $consulta = "call cls_getClientPendingScores(:clientID);";
+        //Creo una nueva conexión
+        $conn = Database::getInstance()->getDb();
+        //Preparo la consulta
+        $comando = $conn->prepare($consulta);
+        //bindeo el parámetro a la consulta
+        $comando->bindValue(':clientID', $clientID);
+
+        // Ejecutar sentencia preparada
+        $comando->execute();
+        //Obtengo el arreglo de registros
+        $values = $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        //Armo la respuesta
+        if($values)
+        {
+            $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+            $respuesta["values"] = $values;
+        }
+        else
+        {
+            $respuesta["status"] = array("code" => 911, "description" => requestStatus(918)); // No data found
+        }
+
+        //Elimino la conexión
+        $comando  = null;
+        $conn = null;
+    }
+    catch (PDOException $e)
+    {
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));
+    }
+    catch (Exception $e)
+    {
+        if($GLOBALS["debugMode"] == true)
+            $respuesta["status"] = array("errmsg" => $e->getMessage());
+        else
+            $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
+    }
+
 // Verifico el token de la aplicación que invoca el servicio
-$app->add($AuthAppKey);
+//$app->add($AuthAppKey);
 
 //Ejecuto el FrameWork
 $app->run();

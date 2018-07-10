@@ -1362,3 +1362,36 @@ SET @professionalID = (SELECT professionalID FROM professionals WHERE userID = _
 DELETE FROM professionalprofessions WHERE professionID = _professionID AND professionalID = @professionalID;
 
 END $$
+
+
+-- Obtiene las calificaciones pendientes del cliente
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS cls_getClientPendingScores $$
+CREATE PROCEDURE cls_getClientPendingScores(IN _clientID int)
+BEGIN
+
+SELECT prj.projectID
+FROM projects prj
+WHERE prj.clientID = _clientID
+AND prj.projectID NOT IN (SELECT projectID from professionalscores)
+AND prj.projectStatusID = 4;
+
+END $$
+
+-- Obtiene las calificaciones pendientes del profesional
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfs_getProfessionalPendingScores $$
+CREATE PROCEDURE cls_getPendingScores(IN _professionalID int)
+BEGIN
+
+SELECT prj.projectID
+FROM projects prj, budgets bgt
+WHERE bgt.budgetStatusID = 1
+AND prj.projectID NOT IN (SELECT projectID from clientScore)
+AND prj.projectID = bgt.budgetID
+AND bgt.professionalID = _professionalID
+AND prj.projectStatusID = 4;
+
+END $$
