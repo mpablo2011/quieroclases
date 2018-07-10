@@ -31,7 +31,7 @@ SELECT userID,
        lastLoggin, 
        registerDate, 
        failCount
-FROM quieroservicios.users
+FROM users
 WHERE userID = _userID;
 
 
@@ -552,7 +552,7 @@ DROP PROCEDURE IF EXISTS pwd_insPassword $$
 CREATE PROCEDURE pwd_insPassword(IN _userID int, IN _userPassword varchar(50))
 BEGIN
 
-INSERT INTO quieroservicios.userpasswords(
+INSERT INTO userpasswords(
    userPasswordID
   ,userID
   ,userPasswordStatusID
@@ -854,7 +854,7 @@ DROP PROCEDURE IF EXISTS ntf_updateNotificationStatus $$
 CREATE PROCEDURE ntf_updateNotificationStatus(IN _userID int, _notificationType int, _newStatus int)
 BEGIN
 
-UPDATE quieroservicios.notifications
+UPDATE notifications
 SET notificationStatus = _newStatus
 WHERE userID = _userID
 AND notificationType = _notificationType;
@@ -1296,7 +1296,7 @@ DROP PROCEDURE IF EXISTS cls_insClientScore $$
 CREATE PROCEDURE cls_insClientScore(IN _clientID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN
 
-INSERT INTO quieroservicios.clientscores(
+INSERT INTO clientscores(
    scoreID
   ,clientID
   ,projectID
@@ -1318,9 +1318,13 @@ CREATE PROCEDURE pfs_getProfessionalScores(IN _professionalID int)
 BEGIN
 
 SELECT pfs.scoreID, pfs.professionalID, pfs.projectID, pfs.comments,
-       prj.projectName, prj.projectDescription
-FROM professionalscores pfs, projects prj
+       prj.projectName, prj.projectDescription, prj.professionID, pfs.professionName,
+       usi.firstName, usi.lastName
+FROM professionalscores pfs, projects prj, professions pfs, userinformation usi, clients cli
 WHERE pfs.projectID = prj.projectID
+AND prj.professionID = pfs.professionID
+AND prj.clientID = cli.clientID
+AND cli.userID = usi.userID
 AND pfs.professionalID = _professionalID;
 
 END $$
