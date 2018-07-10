@@ -95,12 +95,12 @@ $app->post('/insertClientScore', function (Request $request, Response $response)
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
 
-if ($userID != '' && $scoreId != '')
+if ($userID != '' && $scoreID != '')
 {
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insClientScore(:userID, :scoreID, :projectID :comments);";
+        $consulta = "call cls_insClientScore(:userID, :scoreID, :projectID, :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
