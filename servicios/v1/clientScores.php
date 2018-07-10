@@ -84,9 +84,7 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 // Inserto un nuevo proyecto
 $app->post('/insertClientScore', function (Request $request, Response $response) {
 
-
-    $clientID = $request->getParam('clientID');
-    $clientID = clean_var($clientID);
+    $userID = $request->getAttribute('userID');
 
     $scoreID = $request->getParam('scoreID');
     $scoreID = clean_var($scoreID);
@@ -102,14 +100,14 @@ if ($userID != '' && $scoreId != '')
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insClientScore(:clientID, :scoreID, :projectID :comments);";
+        $consulta = "call cls_insClientScore(:userID, :scoreID, :projectID :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':userID', $userID);
         $comando->bindValue(':scoreID', $scoreID);
         $comando->bindValue(':projectID', $projectID);
         $comando->bindValue(':comments', $comments);
