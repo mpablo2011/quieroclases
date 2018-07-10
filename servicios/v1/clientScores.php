@@ -28,13 +28,19 @@ $app = new \Slim\App();
 $app->get('/getClientScores', function (Request $request, Response $response) {
     
     // Preparar sentencia
-   $consulta = "call cls_getClientScores();";
+   $consulta = "call cls_getClientScores(:clientID);";
+
+    $clientID = $request->getParam('clientID');
+    $clientID = clean_var($clientID);
 
    try {
-           //Creo una nueva conexión
+          //Creo una nueva conexión
            $conn = Database::getInstance()->getDb();
            //Preparo la consulta
            $comando = $conn->prepare($consulta);
+           //bindeo el parámetro a la consulta
+           $comando->bindValue(':clientID', $clientID);
+
            // Ejecutar sentencia preparada
            $comando->execute();
            //Obtengo el arreglo de registros
@@ -118,7 +124,7 @@ if ($userID != '' && $scoreId != '')
         }
         else
         {
-            $respuesta["status"] = array("code" => 408, "description" => requestStatus(408));
+            $respuesta["status"] = array("code" => 411, "description" => requestStatus(411));
         }
 
         //Elimino la conexión

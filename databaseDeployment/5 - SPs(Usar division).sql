@@ -1283,10 +1283,15 @@ DROP PROCEDURE IF EXISTS cls_getClientScores $$
 CREATE PROCEDURE cls_getClientScores(in _userID int)
 BEGIN
 
-SELECT u.firstName, u.lastName, s.ScoreDescription, cs.comments FROM clientscores cs
-inner join scores s ON cs.scoreID = s.ScoreID
-INNER join clients c on c.clientID = cs.clientID
-inner join userinformation u on c.userID = u.userID;
+SELECT cls.scoreID, cls.clientID, cls.projectID, cls.projectID,
+       prj.projectName, prj.projectDescription, prj.professionID, pfs.professionName,
+       usi.firstName, usi.lastName
+FROM clientscores cls, projects prj, professions pfn, userinformation usi, clients cli
+WHERE cls.projectID = prj.projectID
+AND prj.professionID = pfn.professionID
+AND prj.clientID = cli.clientID
+AND cli.userID = usi.userID
+AND cls.clientID = _clientID;
 
 END $$
 
@@ -1318,11 +1323,11 @@ CREATE PROCEDURE pfs_getProfessionalScores(IN _professionalID int)
 BEGIN
 
 SELECT pfs.scoreID, pfs.professionalID, pfs.projectID, pfs.comments,
-       prj.projectName, prj.projectDescription, prj.professionID, pfs.professionName,
+       prj.projectName, prj.projectDescription, prj.professionID, pfn.professionName,
        usi.firstName, usi.lastName
-FROM professionalscores pfs, projects prj, professions pfs, userinformation usi, clients cli
+FROM professionalscores pfs, projects prj, professions pfn, userinformation usi, clients cli
 WHERE pfs.projectID = prj.projectID
-AND prj.professionID = pfs.professionID
+AND prj.professionID = pfn.professionID
 AND prj.clientID = cli.clientID
 AND cli.userID = usi.userID
 AND pfs.professionalID = _professionalID;
