@@ -35,6 +35,16 @@ CALL pwd_insertUserPassword(2, 'oak'); -- _userID, _newPassword
 CALL usi_insUserInformation(2, 'Samuel', 'Oak', '1970-12-12', 1, 11, '49999999'); -- (IN _userID int, IN _firstName varchar(100), IN _lastName varchar(100), IN _birthdate date, IN _sexID int, IN _areaCode int, IN _phoneNumber varchar(20))
 CALL pfl_insertProfessional (2); -- _userID
 CALL pps_insertProfessionalProfession(1, 1); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 2); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 3); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 4); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 5); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 6); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 7); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 8); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 9); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 10); -- _professionalID, _professionID
+CALL pps_insertProfessionalProfession(1, 11); -- _professionalID, _professionID
 CALL pfl_insProfessionalLocation(2, 12, 3, 289, 'Av. Rivadavia 3270', -34.6107665, -58.4148294); -- (IN _userID int, IN _countryID int, IN _stateProvinceID int, IN _cityID int, in _streetAddress varchar(100), IN _lat int, IN _lng int)
 
 
