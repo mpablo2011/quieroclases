@@ -1098,6 +1098,7 @@ CREATE PROCEDURE bgt_getBudgetsByProjectID(IN _projectID int)
 
 BEGIN
 
+/*
 SELECT bgt.budgetID, 
        bgt.projectID, 
        bgt.professionalID, 
@@ -1129,7 +1130,63 @@ AND pfs.userID = usi.userID
 AND usi.sexID = sty.sexID
 AND bgt.projectID = _projectID 
 AND pfs.professionalID = pfl.professionalID;
+*/
 
+SELECT 
+bgt.budgetID, 
+bgt.projectID, 
+bgt.professionalID, 
+bgt.amount, 
+bgt.requestDate, 
+bgt.budgetStatusID,
+bgs.statusName,
+bgs.statusDescription,
+bgt.comments,
+usi.firstName,
+usi.lastName,
+usi.sexID,
+sty.sexCode,
+sty.sexName,
+pfl.stateProvinceID,
+pfl.cityID,
+pfl.streetAddress,
+pfl.lat,
+pfl.lng, 
+COALESCE(positivos.cantidad, 0) positivos,
+COALESCE(negativos.cantidad, 0) negativos,
+COALESCE(neutros.cantidad, 0) neutros 
+FROM budgets bgt
+INNER JOIN budgetstatus bgs ON bgs.budgetStatusID = bgt.budgetStatusID 
+INNER JOIN projects prj ON prj.projectID = bgt.projectID 
+INNER JOIN professionals pfs ON pfs.professionalID = bgt.professionalID AND bgt.budgetStatusID IN (2,4)
+INNER JOIN professionalLocation pfl ON pfl.professionalID = pfs.professionalID 
+INNER JOIN userinformation usi ON usi.userID = pfs.userID 
+INNER JOIN sextypes sty ON sty.sexID = usi.sexID  
+LEFT JOIN (
+    SELECT b1.professionalID, COUNT(*) as cantidad
+    FROM clientscores cs1
+    INNER JOIN projects prf1 ON prf1.projectID = cs1.projectID 
+    INNER JOIN budgets b1 ON b1.projectID = prf1.projectID AND b1.budgetStatusID IN (2,4)
+    WHERE cs1.scoreID = 1
+    GROUP BY b1.professionalID 
+) positivos ON positivos.professionalID = pfs.professionalID 
+LEFT JOIN (
+    SELECT b1.professionalID, COUNT(*) as cantidad
+    FROM clientscores cs1
+    INNER JOIN projects prf1 ON prf1.projectID = cs1.projectID 
+    INNER JOIN budgets b1 ON b1.projectID = prf1.projectID AND b1.budgetStatusID IN (2,4)
+    WHERE cs1.scoreID = 2
+    GROUP BY b1.professionalID 
+) negativos ON positivos.professionalID = pfs.professionalID 
+LEFT JOIN (
+    SELECT b1.professionalID, COUNT(*) as cantidad
+    FROM clientscores cs1
+    INNER JOIN projects prf1 ON prf1.projectID = cs1.projectID 
+    INNER JOIN budgets b1 ON b1.projectID = prf1.projectID AND b1.budgetStatusID IN (2,4)
+    WHERE cs1.scoreID = 3
+    GROUP BY b1.professionalID  
+) neutros ON neutros.professionalID = pfs.professionalID
+WHERE bgt.projectID = _projectID;
 
 END $$
 
