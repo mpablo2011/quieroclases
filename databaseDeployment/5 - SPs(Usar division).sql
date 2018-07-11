@@ -1143,7 +1143,7 @@ LEFT JOIN (
     INNER JOIN projectprofessionals pp ON pp.projectID = prf1.projectID 
     WHERE cs1.scoreID = 2
     GROUP BY pp.professionalID 
-) negativos ON positivos.professionalID = pfs.professionalID 
+) negativos ON negativos.professionalID = pfs.professionalID 
 LEFT JOIN (
     SELECT pp.professionalID, COUNT(*) as cantidad
     FROM clientscores cs1
