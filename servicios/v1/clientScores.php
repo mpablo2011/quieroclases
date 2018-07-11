@@ -27,11 +27,10 @@ $app = new \Slim\App();
 // obtengo todas las profesiones
 $app->post('/getClientScores', function (Request $request, Response $response) {
     
-    // Preparar sentencia
-   $consulta = "call cls_getClientScores(:clientID);";
+    $userID = $request->getAttribute('userID');
 
-    $clientID = $request->getParam('clientID');
-    $clientID = clean_var($clientID);
+    // Preparar sentencia
+    $consulta = "call cls_getClientScores(:userID);";
 
    try {
           //Creo una nueva conexión
@@ -39,7 +38,7 @@ $app->post('/getClientScores', function (Request $request, Response $response) {
            //Preparo la consulta
            $comando = $conn->prepare($consulta);
            //bindeo el parámetro a la consulta
-           $comando->bindValue(':clientID', $clientID);
+           $comando->bindValue(':userID', $userID);
 
            // Ejecutar sentencia preparada
            $comando->execute();

@@ -1284,14 +1284,14 @@ CREATE PROCEDURE cls_getClientScores(in _userID int)
 BEGIN
 
 SELECT cls.scoreID, cls.clientID, cls.projectID, cls.projectID,
-       prj.projectName, prj.projectDescription, prj.professionID, pfs.professionName,
+       prj.projectName, prj.projectDescription, pfn.professionID, pfn.professionName,
        usi.firstName, usi.lastName
 FROM clientscores cls, projects prj, professions pfn, userinformation usi, clients cli
 WHERE cls.projectID = prj.projectID
 AND prj.professionID = pfn.professionID
 AND prj.clientID = cli.clientID
-AND cli.userID = usi.userID
-AND cls.clientID = _clientID;
+AND cli.userID = _userID
+AND cls.clientID = cli.clientID;
 
 END $$
 
