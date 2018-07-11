@@ -179,41 +179,28 @@ INSERT INTO budgetStatus VALUES ('4','CERRADO','Servicio finalizado');
 UNLOCK TABLES;
 
 
+
+
 --
 -- Dumping data for table professions
 --
 LOCK TABLES professions WRITE;
 /*!40000 ALTER TABLE professions DISABLE KEYS */;
-INSERT INTO professions VALUES ('1', 'Albañiles');
-INSERT INTO professions VALUES ('2', 'Armador de mueble');
-INSERT INTO professions VALUES ('3', 'Camaras de seguridad');
-INSERT INTO professions VALUES ('4', 'Carpinteros');
-INSERT INTO professions VALUES ('5', 'Cerrajeros');
-INSERT INTO professions VALUES ('6', 'Cristaleros');
-INSERT INTO professions VALUES ('7', 'Decoradores');
-INSERT INTO professions VALUES ('8', 'Doctores');
-INSERT INTO professions VALUES ('9', 'Durlock');
-INSERT INTO professions VALUES ('10', 'Electricistas');
-INSERT INTO professions VALUES ('11', 'Fletes');
-INSERT INTO professions VALUES ('12', 'Fumigaciones');
-INSERT INTO professions VALUES ('13', 'Gasistas');
-INSERT INTO professions VALUES ('14', 'Herreros');
-INSERT INTO professions VALUES ('15', 'Ingenieros');
-INSERT INTO professions VALUES ('16', 'Ingenieros');
-INSERT INTO professions VALUES ('17', 'Instalador Soporte de TV');
-INSERT INTO professions VALUES ('18', 'Jardineros');
-INSERT INTO professions VALUES ('19', 'Maestro mayor de obra');
-INSERT INTO professions VALUES ('20', 'Mudanzas');
-INSERT INTO professions VALUES ('21', 'Niñeras');
-INSERT INTO professions VALUES ('22', 'Niñeras');
-INSERT INTO professions VALUES ('23', 'Pintores');
-INSERT INTO professions VALUES ('24', 'Pisos');
-INSERT INTO professions VALUES ('25', 'Plomeros');
-INSERT INTO professions VALUES ('26', 'Servicio Aire Acondicionado');
-INSERT INTO professions VALUES ('27', 'Servicio tecnico celular');
-INSERT INTO professions VALUES ('28', 'Servicio tecnico computacion');
-INSERT INTO professions VALUES ('29', 'Servicio TV; Audio y Video');
-INSERT INTO professions VALUES ('30', 'Traductores');
+INSERT INTO professions VALUES ('1', 'Matemática');
+INSERT INTO professions VALUES ('2', 'Computación');
+INSERT INTO professions VALUES ('3', 'Inglés');
+INSERT INTO professions VALUES ('4', 'Guitarra');
+INSERT INTO professions VALUES ('5', 'Percusión');
+INSERT INTO professions VALUES ('6', 'Piano');
+INSERT INTO professions VALUES ('7', 'Yoga');
+INSERT INTO professions VALUES ('8', 'Pilates');
+INSERT INTO professions VALUES ('9', 'Fisica/Quimica');
+INSERT INTO professions VALUES ('10', 'Estadistica/Contabilidad');
+INSERT INTO professions VALUES ('11', 'Porcelana fria');
+INSERT INTO professions VALUES ('12', 'Pintura al oleo');
+INSERT INTO professions VALUES ('13', 'Cocina básica');
+INSERT INTO professions VALUES ('14', 'Dibujo técnico');
+INSERT INTO professions VALUES ('15', 'Canto');
 /*!40000 ALTER TABLE professions ENABLE KEYS */;
 UNLOCK TABLES;
 
