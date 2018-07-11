@@ -295,11 +295,11 @@ else
 
 
 // Elimino un proyecto por su id
-$app->delete('/deleteProfessionalProfession', function (Request $request, Response $response) {
+$app->delete('/deleteProfessionalProfession/{professionID}', function (Request $request, Response $response) {
     
     //Obtengo y limpio las variables
     $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
-    $professionID = $request->getParam('professionID');
+    $professionID = $request->getAttribute('professionID');
     $professionID = clean_var($professionID);
 
     if ($userID != '' && $professionID != '')
@@ -356,10 +356,9 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 $app->get('/getProfessionalProfessions', function (Request $request, Response $response) {
     
         // Preparar sentencia
-        $consulta = "call pfl_getProfessionalProfessions();";
+        $consulta = "call pfl_getProfessionalProfessions(:userID);";
 
-        $professionalID = $request->getParam('professionalID');
-        $professionalID = clean_var($professionalID);
+        $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
 
         try {
                 //Creo una nueva conexión
@@ -367,7 +366,7 @@ $app->get('/getProfessionalProfessions', function (Request $request, Response $r
                 //Preparo la consulta
                 $comando = $conn->prepare($consulta);
                 //bindeo el parámetro a la consulta
-                $comando->bindValue(':professionalID', $professionalID);
+                $comando->bindValue(':userID', $userID);
                 // Ejecutar sentencia preparada
                 $comando->execute();
                 //Obtengo el arreglo de registros
@@ -406,7 +405,7 @@ $app->get('/getProfessionalProfessions', function (Request $request, Response $r
     //Realizo el envío del mensaje
     return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 
-});
+})->add($AuthUserPermisson);
 
 //Ejecución de la sentencia del FW NO BORRAR
 $app->run();

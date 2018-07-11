@@ -1415,11 +1415,13 @@ END $$
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pfl_getProfessionalProfessions $$
-CREATE PROCEDURE pfl_getProfessionalProfessions(IN _professionalID int)
+CREATE PROCEDURE pfl_getProfessionalProfessions(IN _userID int)
 BEGIN
 
-SELECT pfn.professionID, pfn.professionName FROM professionalprofessions pfp, professions pfn
-WHERE pfp.professionID = pfn.professionID
-AND pfp.professionalID = _professionalID;
+SELECT pfn.professionID, pfn.professionName 
+FROM professionals pro 
+INNER JOIN professionalprofessions pfp ON pfp.professionalID = pro.professionalID
+INNER JOIN professions pfn ON pfn.professionID = pfp.professionID 
+WHERE pro.userID = _userID;
 
 END $$
