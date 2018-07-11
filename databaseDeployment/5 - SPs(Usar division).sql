@@ -1233,7 +1233,7 @@ UPDATE budgets bgt
 SET bgt.budgetStatusID = _budgetStatusID
 WHERE bgt.budgetID = _budgetID;
 
-UPDATE projects SET projectStatusID = 2
+UPDATE projects SET projectStatusID = 4
 WHERE projectID = @projectID;
 
 ELSE
@@ -1389,7 +1389,7 @@ INNER JOIN budgets b ON b.projectID = prj.projectID AND b.budgetStatusID IN (2,4
 INNER JOIN professionals pro ON pro.professionalID = b.professionalID 
 INNER JOIN userinformation ui ON ui.userID = pro.userID 
 WHERE cli.userID = _userID
-AND prj.projectID NOT IN (SELECT projectID from professionalscores)
+AND prj.projectID NOT IN (SELECT projectID from clientScores)
 AND prj.projectStatusID = 4;
 
 END $$
