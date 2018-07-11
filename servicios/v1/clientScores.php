@@ -84,9 +84,7 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 // Inserto un nuevo proyecto
 $app->post('/insertClientScore', function (Request $request, Response $response) {
 
-
-    $clientID = $request->getParam('clientID');
-    $clientID = clean_var($clientID);
+    $userID = $request->getAttribute('userID');
 
     $scoreID = $request->getParam('scoreID');
     $scoreID = clean_var($scoreID);
@@ -97,19 +95,19 @@ $app->post('/insertClientScore', function (Request $request, Response $response)
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
 
-if ($userID != '' && $scoreId != '')
+if ($userID != '' && $scoreID != '')
 {
     try {
 
         // Preparar sentencia
-        $consulta = "call cls_insClientScore(:clientID, :scoreID, :projectID :comments);";
+        $consulta = "call cls_insClientScore(:userID, :scoreID, :projectID, :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':userID', $userID);
         $comando->bindValue(':scoreID', $scoreID);
         $comando->bindValue(':projectID', $projectID);
         $comando->bindValue(':comments', $comments);
@@ -168,20 +166,19 @@ else
 })->add($AuthUserPermisson);
 
 // obtengo todos los proyectos de un usuario
-$app->post('/getClientPendingScores', function (Request $request, Response $response) {
+$app->get('/getClientPendingScores', function (Request $request, Response $response) {
 
-    $clientID = $request->getParam('clientID');
-    $clientID = clean_var($clientID);
+    $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
 
     try {
         // Preparar sentencia
-        $consulta = "call cls_getClientPendingScores(:clientID);";
+        $consulta = "call cls_getClientPendingScores(:userID);";
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':userID', $userID);
 
         // Ejecutar sentencia preparada
         $comando->execute();
@@ -218,6 +215,11 @@ $app->post('/getClientPendingScores', function (Request $request, Response $resp
             $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
     }
 
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
 // Verifico el token de la aplicación que invoca el servicio
 //$app->add($AuthAppKey);
 
