@@ -1158,7 +1158,7 @@ COALESCE(neutros.cantidad, 0) neutros
 FROM budgets bgt
 INNER JOIN budgetstatus bgs ON bgs.budgetStatusID = bgt.budgetStatusID 
 INNER JOIN projects prj ON prj.projectID = bgt.projectID 
-INNER JOIN professionals pfs ON pfs.professionalID = bgt.professionalID AND bgt.budgetStatusID IN (2,4)
+INNER JOIN professionals pfs ON pfs.professionalID = bgt.professionalID
 INNER JOIN professionalLocation pfl ON pfl.professionalID = pfs.professionalID 
 INNER JOIN userinformation usi ON usi.userID = pfs.userID 
 INNER JOIN sextypes sty ON sty.sexID = usi.sexID  
