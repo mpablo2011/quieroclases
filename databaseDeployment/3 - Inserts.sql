@@ -186,7 +186,7 @@ UNLOCK TABLES;
 --
 LOCK TABLES professions WRITE;
 /*!40000 ALTER TABLE professions DISABLE KEYS */;
-INSERT INTO professions VALUES ('1', 'Matemática');
+INSERT INTO professions VALUES ('1', 'Matemáticas');
 INSERT INTO professions VALUES ('2', 'Computación');
 INSERT INTO professions VALUES ('3', 'Inglés');
 INSERT INTO professions VALUES ('4', 'Guitarra');
