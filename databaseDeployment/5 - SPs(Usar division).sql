@@ -1321,18 +1321,19 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pfs_getProfessionalScores $$
 
-CREATE PROCEDURE pfs_getProfessionalScores(IN _professionalID int)
+CREATE PROCEDURE pfs_getProfessionalScores(IN _userID int)
 BEGIN
 
 SELECT pfs.scoreID, pfs.professionalID, pfs.projectID, pfs.comments,
        prj.projectName, prj.projectDescription, prj.professionID, pfn.professionName,
        usi.firstName, usi.lastName
-FROM professionalscores pfs, projects prj, professions pfn, userinformation usi, clients cli
-WHERE pfs.projectID = prj.projectID
+FROM professionalscores pfs, professionals pro, projects prj, professions pfn, userinformation usi, clients cli
+WHERE pfs.professionalID = pro.professionalID 
+AND pfs.projectID = prj.projectID
 AND prj.professionID = pfn.professionID
 AND prj.clientID = cli.clientID
 AND cli.userID = usi.userID
-AND pfs.professionalID = _professionalID;
+AND pro.userID = _userID;
 
 END $$
 
@@ -1340,14 +1341,15 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS pfs_insProfessionalScore $$
 
-CREATE PROCEDURE pfs_insProfessionalScore(IN _professionalID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
+CREATE PROCEDURE pfs_insProfessionalScore(IN _userID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN
 
+SET @professionalID = (SELECT professionalID FROM professionals WHERE userID = _userID);
 
 INSERT INTO professionalscores
 (professionalID, scoreID, projectID, comments)
-values 
-(_professionalID, _scoreID, _projectID, _comments);
+VALUES
+(@professionalID, _scoreID, _projectID, _comments);
 
 END $$
 
@@ -1408,5 +1410,20 @@ AND prj.projectID NOT IN (SELECT projectID from clientScore)
 AND prj.projectID = bgt.budgetID
 AND bgt.professionalID = _professionalID
 AND prj.projectStatusID = 4;
+
+END $$
+
+-- Obtiene las profesiones de un profesional
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfl_getProfessionalProfessions $$
+CREATE PROCEDURE pfl_getProfessionalProfessions(IN _userID int)
+BEGIN
+
+SELECT pfn.professionID, pfn.professionName 
+FROM professionals pro 
+INNER JOIN professionalprofessions pfp ON pfp.professionalID = pro.professionalID
+INNER JOIN professions pfn ON pfn.professionID = pfp.professionID 
+WHERE pro.userID = _userID;
 
 END $$

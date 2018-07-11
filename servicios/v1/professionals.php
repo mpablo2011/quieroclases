@@ -295,11 +295,11 @@ else
 
 
 // Elimino un proyecto por su id
-$app->delete('/deleteProfessionalProfession', function (Request $request, Response $response) {
+$app->delete('/deleteProfessionalProfession/{professionID}', function (Request $request, Response $response) {
     
     //Obtengo y limpio las variables
     $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
-    $professionID = $request->getParam('professionID');
+    $professionID = $request->getAttribute('professionID');
     $professionID = clean_var($professionID);
 
     if ($userID != '' && $professionID != '')
@@ -349,6 +349,61 @@ else
 
 //Realizo el envío del mensaje
 return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
+
+})->add($AuthUserPermisson);
+
+// obtengo todas las profesiones
+$app->get('/getProfessionalProfessions', function (Request $request, Response $response) {
+    
+        // Preparar sentencia
+        $consulta = "call pfl_getProfessionalProfessions(:userID);";
+
+        $userID = $request->getAttribute('userID'); //userID obtenido desde el Middleware
+
+        try {
+                //Creo una nueva conexión
+                $conn = Database::getInstance()->getDb();
+                //Preparo la consulta
+                $comando = $conn->prepare($consulta);
+                //bindeo el parámetro a la consulta
+                $comando->bindValue(':userID', $userID);
+                // Ejecutar sentencia preparada
+                $comando->execute();
+                //Obtengo el arreglo de registros
+                $values = $comando->fetchAll(PDO::FETCH_ASSOC);
+
+                //Armo la respuesta
+                if($values)
+                {
+                    $respuesta["status"] = array("code" => 200, "description" => requestStatus(200)); //OK
+                    $respuesta["values"] = $values;
+                }
+                else
+                {
+                    $respuesta["status"] = array("code" => 502, "description" => requestStatus(502)); // No data found
+                }
+
+                //Elimino la conexión
+                $comando  = null;
+                $conn = null;
+        }  
+        catch (PDOException $e) 
+        {
+            if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 502, "description" => requestStatus(502));       
+        } 
+        catch (Exception $e) 
+        {
+        if($GLOBALS["debugMode"] == true)
+                $respuesta["status"] = array("errmsg" => $e->getMessage());
+            else
+                $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));       
+        }      
+
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 
 })->add($AuthUserPermisson);
 
