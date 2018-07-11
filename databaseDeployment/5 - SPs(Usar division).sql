@@ -1396,6 +1396,32 @@ AND prj.projectStatusID = 4;
 
 END $$
 
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfs_getProfessionalPendingScores $$
+CREATE PROCEDURE pfs_getProfessionalPendingScores(IN _userID int)
+BEGIN
+
+SELECT 
+  prj.projectID, 
+  prj.projectName, 
+  prj.projectDescription, 
+  prf.professionID, 
+  prf.professionName, 
+  pro.professionalID, 
+  ui.firstName, 
+  ui.lastName
+FROM projects prj 
+INNER JOIN clients cli ON cli.clientID = prj.clientID 
+INNER JOIN professions prf ON prf.professionID = prj.professionID 
+INNER JOIN budgets b ON b.projectID = prj.projectID AND b.budgetStatusID IN (2,4)
+INNER JOIN professionals pro ON pro.professionalID = b.professionalID 
+INNER JOIN userinformation ui ON ui.userID = cli.userID 
+WHERE pro.userID = _userID
+AND prj.projectID NOT IN (SELECT projectID from clientScores)
+AND prj.projectStatusID = 4;
+
+END $$
+
 -- Obtiene las calificaciones pendientes del profesional
 
 DELIMITER $$

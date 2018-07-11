@@ -25,7 +25,7 @@ function base64url_decode($plainText) {
 	return $base64;
 };
 
-//Obtener dirección IP Real remota
+//Obtener direcciï¿½n IP Real remota
 function getRealIPAddr()
 {
  if (!empty($_SERVER['HTTP_CLIENT_IP']))   //Comprobar IP compartir internet
@@ -48,7 +48,7 @@ function validarMail()
 	}
 };
 
-//Generador de cadena para recuperación de contraseñas
+//Generador de cadena para recuperaciï¿½n de contraseï¿½as
 # Genera un string de $tamanio caracteres
 # tiene incluido tambien numeros
 function generarPassword()
@@ -94,9 +94,9 @@ function fecha_sql($fecha)
 	if($fecha <> '')
 	{
 		$fecha = quitar($fecha); //Elimino caracteres especiales, en caso de que haya
-		$dia = substr($fecha, 0, 2); //Obtengo el día
+		$dia = substr($fecha, 0, 2); //Obtengo el dï¿½a
 		$mes   = substr($fecha, 3, 2); //Obtengo el mes
-		$ano = substr($fecha, 6, 4); //Obtengo el año
+		$ano = substr($fecha, 6, 4); //Obtengo el aï¿½o
 		$fechasql = $ano . '/' . $mes . '/' . $dia; // fechal final realizada el cambio de formato a las fechas SQL
 	}
 	return $fechasql;
@@ -109,15 +109,15 @@ function fechaeuropea($fecha)
 	if($fecha <> '')
 	{
 		$fecha = quitar($fecha); //Elimino caracteres especiales, en caso de que haya
-		$dia = substr($fecha, 8, 2); //Obtengo el día
+		$dia = substr($fecha, 8, 2); //Obtengo el dï¿½a
 		$mes   = substr($fecha, 5, 2); //Obtengo el mes
-		$ano = substr($fecha, 0, 4); //Obtengo el año
+		$ano = substr($fecha, 0, 4); //Obtengo el aï¿½o
 		$fechaeuropea = $dia . '/' . $mes . '/' . $ano; // fechal final realizada el cambio de formato a las fechas europeas
 	}
 	return $fechaeuropea;
 };
 
-// Recibo una cadena y la valido, en caso de que la misma esté vacia devuelvo vacio.
+// Recibo una cadena y la valido, en caso de que la misma estï¿½ vacia devuelvo vacio.
 function validar_cadena($cadena)
 {
 	if($cadena <> '')
@@ -138,7 +138,7 @@ else
 	return $v;
 };
 
-//Funcion para devolver el método
+//Funcion para devolver el mï¿½todo
 function getMethod($method)
 {    
     switch ($method) {
@@ -153,7 +153,7 @@ function getMethod($method)
     }    
 } ;
 
-//Funcion para devolver el método
+//Funcion para devolver el mï¿½todo
 function getVarByMethod($var, $method)
 {    
     switch ($method) {
@@ -168,7 +168,7 @@ function getVarByMethod($var, $method)
     }    
 } ;
 
-// Función para devolver los estados
+// Funciï¿½n para devolver los estados
 function requestStatus($code) {
         $status = array(  
             200 => 'OK',
@@ -204,6 +204,7 @@ function requestStatus($code) {
             915 => 'User Token Cannot be Null',
             916 => 'Usuario autenticado de forma correcta, ya puede ingresar a la aplicacion',
             917 => 'No existen presupuestos para este proyecto',
+            918 => 'No existen scores para este proyecto',
             23001 => 'Ya existe un proyecto con el mismo nombre.',
             23002 => 'El mail ingresado ya existe.',
             24001 => 'Token invalido.',
@@ -212,7 +213,7 @@ function requestStatus($code) {
         return ($status[$code])?$status[$code]:$status[500]; 
 };
 
-// Coloca un null en caso de que la cadena de caracteres se encuentre vacia además limpia caracteres especiales
+// Coloca un null en caso de que la cadena de caracteres se encuentre vacia ademï¿½s limpia caracteres especiales
 function clean_var($v)
 {
 if (empty($v) || $v == '')
