@@ -1233,7 +1233,7 @@ UPDATE budgets bgt
 SET bgt.budgetStatusID = _budgetStatusID
 WHERE bgt.budgetID = _budgetID;
 
-UPDATE projects SET projectStatusID = 2
+UPDATE projects SET projectStatusID = 4
 WHERE projectID = @projectID;
 
 ELSE
@@ -1321,18 +1321,19 @@ END $$
 DELIMITER $$
 DROP PROCEDURE IF EXISTS pfs_getProfessionalScores $$
 
-CREATE PROCEDURE pfs_getProfessionalScores(IN _professionalID int)
+CREATE PROCEDURE pfs_getProfessionalScores(IN _userID int)
 BEGIN
 
 SELECT pfs.scoreID, pfs.professionalID, pfs.projectID, pfs.comments,
        prj.projectName, prj.projectDescription, prj.professionID, pfn.professionName,
        usi.firstName, usi.lastName
-FROM professionalscores pfs, projects prj, professions pfn, userinformation usi, clients cli
-WHERE pfs.projectID = prj.projectID
+FROM professionalscores pfs, professionals pro, projects prj, professions pfn, userinformation usi, clients cli
+WHERE pfs.professionalID = pro.professionalID 
+AND pfs.projectID = prj.projectID
 AND prj.professionID = pfn.professionID
 AND prj.clientID = cli.clientID
 AND cli.userID = usi.userID
-AND pfs.professionalID = _professionalID;
+AND pro.userID = _userID;
 
 END $$
 
@@ -1340,14 +1341,15 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS pfs_insProfessionalScore $$
 
-CREATE PROCEDURE pfs_insProfessionalScore(IN _professionalID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
+CREATE PROCEDURE pfs_insProfessionalScore(IN _userID int, IN _scoreID int, IN _projectID int, IN _comments varchar(200))
 BEGIN
 
+SET @professionalID = (SELECT professionalID FROM professionals WHERE userID = _userID);
 
 INSERT INTO professionalscores
 (professionalID, scoreID, projectID, comments)
-values 
-(_professionalID, _scoreID, _projectID, _comments);
+VALUES
+(@professionalID, _scoreID, _projectID, _comments);
 
 END $$
 
@@ -1389,7 +1391,33 @@ INNER JOIN budgets b ON b.projectID = prj.projectID AND b.budgetStatusID IN (2,4
 INNER JOIN professionals pro ON pro.professionalID = b.professionalID 
 INNER JOIN userinformation ui ON ui.userID = pro.userID 
 WHERE cli.userID = _userID
-AND prj.projectID NOT IN (SELECT projectID from professionalscores)
+AND prj.projectID NOT IN (SELECT projectID from clientScores)
+AND prj.projectStatusID = 4;
+
+END $$
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS pfs_getProfessionalPendingScores $$
+CREATE PROCEDURE pfs_getProfessionalPendingScores(IN _userID int)
+BEGIN
+
+SELECT 
+  prj.projectID, 
+  prj.projectName, 
+  prj.projectDescription, 
+  prf.professionID, 
+  prf.professionName, 
+  pro.professionalID, 
+  ui.firstName, 
+  ui.lastName
+FROM projects prj 
+INNER JOIN clients cli ON cli.clientID = prj.clientID 
+INNER JOIN professions prf ON prf.professionID = prj.professionID 
+INNER JOIN budgets b ON b.projectID = prj.projectID AND b.budgetStatusID IN (2,4)
+INNER JOIN professionals pro ON pro.professionalID = b.professionalID 
+INNER JOIN userinformation ui ON ui.userID = cli.userID 
+WHERE pro.userID = _userID
+AND prj.projectID NOT IN (SELECT projectID from clientScores)
 AND prj.projectStatusID = 4;
 
 END $$

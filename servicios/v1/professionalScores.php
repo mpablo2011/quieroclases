@@ -25,13 +25,12 @@ $app = new \Slim\App();
 
 
 // obtengo todas las profesiones
-$app->post('/getProfessionalScores', function (Request $request, Response $response) {
+$app->get('/getProfessionalScores', function (Request $request, Response $response) {
     
     // Preparar sentencia
-   $consulta = "call pfs_getProfessionalScores(:professionalID);";
+   $consulta = "call pfs_getProfessionalScores(:userID);";
 
-    $professionalID = $request->getParam('professionalID');
-    $professionalID = clean_var($professionalID);
+   $userID = $request->getAttribute('userID');
 
    try {
           //Creo una nueva conexión
@@ -39,7 +38,7 @@ $app->post('/getProfessionalScores', function (Request $request, Response $respo
            //Preparo la consulta
            $comando = $conn->prepare($consulta);
            //bindeo el parámetro a la consulta
-           $comando->bindValue(':professionalID', $professionalID);
+           $comando->bindValue(':userID', $userID);
 
            // Ejecutar sentencia preparada
            $comando->execute();
@@ -85,8 +84,7 @@ return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);
 // Inserto un nuevo proyecto
 $app->post('/insertProfessionalScore', function (Request $request, Response $response) {
 
-    $professionalID = $request->getParam('professionalID');
-    $professionalID = clean_var($professionalID);
+    $userID = $request->getAttribute('userID');
 
     $scoreID = $request->getParam('scoreID');
     $scoreID = clean_var($scoreID);
@@ -97,20 +95,20 @@ $app->post('/insertProfessionalScore', function (Request $request, Response $res
     $comments = $request->getParam('comments');
     $comments = clean_var($comments);
 
-if ($professionalID != '' && $scoreID != '')
+if ($projectID != '' && $scoreID != '')
 {
     try {
 
         // Preparar sentencia
-        $consulta = "call pfs_insProfessionalScore(:professionalID, :scoreID, :projectID :comments);";
+        $consulta = "call pfs_insProfessionalScore(:userID, :scoreID, :projectID, :comments);";
 
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':professionalID', $professionalID);
-        $comando->bindValue(':scoreID', $scoreII);
+        $comando->bindValue(':userID', $userID);
+        $comando->bindValue(':scoreID', $scoreID);
         $comando->bindValue(':projectID', $projectID);
         $comando->bindValue(':comments', $comments);
 
@@ -168,20 +166,19 @@ else
 })->add($AuthUserPermisson);
 
 // obtengo todos los proyectos de un usuario
-$app->post('/getProfessionalPendingScores', function (Request $request, Response $response) {
+$app->get('/getProfessionalPendingScores', function (Request $request, Response $response) {
 
-    $professionalID = $request->getParam('professionalID');
-    $professionalID = clean_var($professionalID);
+    $userID = $request->getAttribute('userID');
 
     try {
         // Preparar sentencia
-        $consulta = "call pfs_getProfessionalPendingScores(:professionalID);";
+        $consulta = "call pfs_getProfessionalPendingScores(:userID);";
         //Creo una nueva conexión
         $conn = Database::getInstance()->getDb();
         //Preparo la consulta
         $comando = $conn->prepare($consulta);
         //bindeo el parámetro a la consulta
-        $comando->bindValue(':clientID', $clientID);
+        $comando->bindValue(':userID', $userID);
 
         // Ejecutar sentencia preparada
         $comando->execute();
@@ -218,7 +215,10 @@ $app->post('/getProfessionalPendingScores', function (Request $request, Response
             $respuesta["status"] = array("code" => 501, "description" => requestStatus(501));
     }
 
+    //Realizo el envío del mensaje
+    return $response->withJson($respuesta,200, JSON_UNESCAPED_UNICODE);    
 
+})->add($AuthUserPermisson);
 // Verifico el token de la aplicación que invoca el servicio
 //$app->add($AuthAppKey);
 
