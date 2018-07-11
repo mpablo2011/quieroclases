@@ -25,7 +25,7 @@ $app = new \Slim\App();
 
 
 // obtengo todas las profesiones
-$app->post('/getClientScores', function (Request $request, Response $response) {
+$app->get('/getClientScores', function (Request $request, Response $response) {
     
     $userID = $request->getAttribute('userID');
 

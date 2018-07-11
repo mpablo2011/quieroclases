@@ -1397,7 +1397,7 @@ END $$
 -- Obtiene las calificaciones pendientes del profesional
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS pfs_getProfessionalPendingScores $$
+DROP PROCEDURE IF EXISTS cls_getPendingScores $$
 CREATE PROCEDURE cls_getPendingScores(IN _userID int)
 BEGIN
 
