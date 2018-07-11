@@ -1291,7 +1291,7 @@ WHERE cls.projectID = prj.projectID
 AND prj.professionID = pfn.professionID
 AND prj.clientID = cli.clientID
 AND cli.userID = _userID
-AND cls.clientID = cli.clientID;
+AND cls.clientID = cli.clientID; 
 
 END $$
 
